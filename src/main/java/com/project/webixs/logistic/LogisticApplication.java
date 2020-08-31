@@ -30,3 +30,7 @@ class Mark {
   private String name;
 }
 
+/*
+ *   Repositories
+ */
+interface MarkRepository extends JpaRepository<Mark, Long> {}
