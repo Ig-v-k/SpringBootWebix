@@ -29,34 +29,42 @@ class AbstractRestController<T, R extends JpaRepository<T, ?>> {
   protected R repository;
 
   public AbstractRestController(R repository) {
-    this.repository = repository;
+	this.repository = repository;
   }
 
   @GetMapping
   public Page<T> list(@PageableDefault Pageable pageable) {
-    return repository.findAll(pageable);
+	return repository.findAll(pageable);
   }
 
   @GetMapping("{id}")
   public T getOne(@PathVariable("id") T obj) {
-    return obj;
+	return obj;
   }
 
   @PostMapping
   public T add(@RequestBody T obj) {
-    return repository.save(obj);
+	return repository.save(obj);
   }
 
   @PutMapping("{id}")
   public T update(@PathVariable("id") T dbObj, @RequestBody T obj) {
-    BeanUtils.copyProperties(obj, dbObj, "id");
+	BeanUtils.copyProperties(obj, dbObj, "id");
 
-    return repository.save(dbObj);
+	return repository.save(dbObj);
   }
 
   @DeleteMapping("{id}")
   public void delete(@PathVariable("id") T dbObj) {
-    repository.delete(dbObj);
+	repository.delete(dbObj);
+  }
+}
+
+@RestController
+@RequestMapping("/api/mark")
+class MarkRestController extends AbstractRestController<Mark, MarkRepository> {
+  public MarkRestController(MarkRepository repository) {
+	super(repository);
   }
 }
 
