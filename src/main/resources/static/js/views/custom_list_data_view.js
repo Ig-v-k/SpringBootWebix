@@ -12,8 +12,8 @@ define(function () {
             },
             {
                 view: 'list',
-                height:400,
-                width:700,
+                autoheight: true,
+                autowidth: true,
                 data: [
                     'AAAAAAA',
                     'BBBBBBB',
