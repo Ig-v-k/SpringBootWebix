@@ -1,4 +1,4 @@
-define(['views/custom_list_data_view'],function (listsd) {
+define(function () {
     return {
         view: "form",
         scroll: false,
@@ -33,7 +33,7 @@ define(['views/custom_list_data_view'],function (listsd) {
                 align: "center",
                 width: 150,
                 click: function () {
-                    webix.ui(listsd, $$("root"))
+                    routie('datas')
                 }
             }
         ],
