@@ -107,7 +107,7 @@ const checkState=function(){
     connection.sendAjax("GET","api/user/state").then(data=> {
         userData = data.json();
         showApp();
-    }).fail(err=> {
+    }).fail(()=> {
         showLogin();
     });
 };
