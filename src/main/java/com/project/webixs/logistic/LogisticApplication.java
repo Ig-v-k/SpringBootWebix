@@ -3,6 +3,7 @@ package com.project.webixs.logistic;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Scope;
@@ -10,11 +11,20 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.*;
+import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 @SpringBootApplication
@@ -25,7 +35,7 @@ public class LogisticApplication {
 }
 
 /*
- *   Controllers
+ *   qualifier-Controllers
  */
 class AbstractRestController<T, R extends JpaRepository<T, ?>> {
   protected R repository;
@@ -68,16 +78,96 @@ class MarkRestController extends AbstractRestController<Mark, MarkRepository> {
   public MarkRestController(MarkRepository repository) {
 	super(repository);
   }
+
+
+}
+
+@RestController
+@RequestMapping("/api/user")
+@Scope("request")
+class UserRestController extends AbstractRestController<User, UserRepository> {
+  public UserRestController(UserRepository repository) {
+	super(repository);
+  }
+
+  @RequestMapping(value = {"/state"})
+  public User checkState() throws ForbiddenException {
+	if (userBean.getLoggedIn())
+	  return userBean.getUser();
+	throw new ForbiddenException("Forbidden");
+  }
+}
+
+class CommonController {
+
+  @Autowired
+  protected UserBean userBean;
+
+
+  @ExceptionHandler(BadRequestException.class)
+  @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+  public String handleException(BadRequestException e) {
+	return e.getMessage();
+  }
+
+  @ExceptionHandler(ForbiddenException.class)
+  @ResponseStatus(value = HttpStatus.FORBIDDEN)
+  public String handleException(ForbiddenException e) {
+	return e.getMessage();
+  }
 }
 
 /*
- *   Repositories
+ * 	qualifier-Repositories
  */
 interface MarkRepository extends JpaRepository<Mark, Long> {
 }
+interface UserRepository extends JpaRepository<User, Integer> {
+}
 
 /*
- * 	Entities
+ * 	qualifier-Utils
+ */
+@WebFilter("/api/*")
+class AccessFilter implements Filter {
+
+  @org.springframework.beans.factory.annotation.Value("${'${path.public}'.split(', ')}")
+  private List<String> publicPaths;
+
+  private WebApplicationContext springContext;
+
+  @Override
+  public void init(FilterConfig filterConfig) {
+	springContext = WebApplicationContextUtils.getWebApplicationContext(filterConfig.getServletContext());
+  }
+
+  @Override
+  public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+
+	HttpServletRequest request = (HttpServletRequest) servletRequest;
+	HttpServletResponse response = (HttpServletResponse) servletResponse;
+	UserBean userBean = (UserBean) springContext.getBean("userBean");
+	if (
+		  !request.getRequestURI().startsWith("/api/user/register")
+		  && !request.getRequestURI().startsWith("/api/user/check/")
+		  && !userBean.getLoggedIn()
+		  && !publicPaths.contains(request.getRequestURI())
+	) {
+	  response.sendError(401);
+	} else {
+	  filterChain.doFilter(servletRequest, servletResponse);
+	}
+	// filterChain.doFilter(servletRequest, servletResponse);
+  }
+
+  @Override
+  public void destroy() {
+
+  }
+}
+
+/*
+ *	qualifier-Entities
  */
 @Data
 @Entity
@@ -150,5 +240,25 @@ class UserBean {
   void init() {
 	user = new User();
 	loggedIn = false;
+  }
+}
+
+/*
+* 	Exceptions
+*/
+class BadRequestException extends Exception {
+  private static final long serialVersionUID = -1300922631131923484L;
+
+  public BadRequestException(String message) {
+	super(message);
+  }
+}
+
+
+class ForbiddenException extends Exception {
+  private static final long serialVersionUID = -1300922631131923484L;
+
+  public ForbiddenException(String message) {
+	super(message);
   }
 }

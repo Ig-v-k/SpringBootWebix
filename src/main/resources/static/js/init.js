@@ -1,23 +1,23 @@
 var scriptsToLoad = [
     {
         "section": "webix",
-        "path": "libs/webix/codebase/",
-        "files": ["webix"]
+        "path": "webix/codebase/",
+        "files": ["webix", "dhtmlxscheduler", "i18n/sr", "locale/locale_sr"]
     },
-    // {
-    //     "section": "extensions",
-    //     "path": "webix/extensions/",
-    //     "files": ["FileSaver"]
-    // },
-    // {
-    //     "section": "",
-    //     "path": "js/",
-    //     "files": ["connection", "util", "view_components", "pagination_setup", "properties"]
-    // },
+    {
+        "section": "extensions",
+        "path": "webix/extensions/",
+        "files": ["sidebar/sidebar", "dhtmlxscheduler_readonly", "dhtmlxscheduler_limit", "FileSaver"]
+    },
+    {
+        "section": "common",
+        "path": "js/common/",
+        "files": ["connection", "util", "view_components", "pagination_setup","properties"]
+    },
     {
         "section": "views",
         "path": "js/views/",
-        "files": []
+        "files": ["logger", "report", "company", "dashboard", "vehicle", "user","vehicle_details","reservation","profile","main"]
     },
     {
         "section": "core",
@@ -27,11 +27,11 @@ var scriptsToLoad = [
 ];
 
 var cssToLoad = [
-    "https://fonts.googleapis.com/css?family=PT+Sans:400,400i,700,700i"
-    // "webix/codebase/webix-orange.css",
-    // "css/extended-orange.css",
-    // "webix/extensions/sidebar/sidebar-orange.css",
-    // "webix/codebase/dhtmlxscheduler_material.css"
+    "https://fonts.googleapis.com/css?family=PT+Sans:400,400i,700,700i",
+    "webix/codebase/webix-orange.css",
+    "css/extended-orange.css",
+    "webix/extensions/sidebar/sidebar-orange.css",
+    "webix/codebase/dhtmlxscheduler_material.css"
 ];
 
 var linearJsDownloadOrder = [];
@@ -44,8 +44,8 @@ function loadScript(index) {
     script.charset = "utf-8";
     if (script.readyState) {  //IE
         script.onreadystatechange = function () {
-            if (script.readyState === "loaded" ||
-                script.readyState === "complete") {
+            if (script.readyState == "loaded" ||
+                script.readyState == "complete") {
                 script.onreadystatechange = null;
                 console.log("Loaded script " + url + " (" + (index + 1) + "/" + linearJsDownloadOrder.length + ")");
                 if (index + 1 < linearJsDownloadOrder.length) {
@@ -94,6 +94,7 @@ var loadCss = function () {
         console.log("Loaded css " + cssToLoad[i] + " (" + (i + 1) + "/" + cssToLoad.length + ")");
     }
 };
+
 
 loadCss();
 loadScripts();
