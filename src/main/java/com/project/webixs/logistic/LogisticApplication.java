@@ -71,6 +71,12 @@ class MarkRestController extends AbstractRestController<Mark, MarkRepository> {
 }
 
 /*
+ *   Repositories
+ */
+interface MarkRepository extends JpaRepository<Mark, Long> {
+}
+
+/*
  * 	Entities
  */
 @Data
@@ -145,10 +151,4 @@ class UserBean {
 	user = new User();
 	loggedIn = false;
   }
-}
-
-/*
- *   Repositories
- */
-interface MarkRepository extends JpaRepository<Mark, Long> {
 }
