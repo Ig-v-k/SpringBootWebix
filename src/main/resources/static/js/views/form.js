@@ -33,7 +33,10 @@ define(function () {
                 align: "center",
                 width: 150,
                 click: function () {
-                    routie('datas')
+                    var form = this.getParentView();
+                    if (form.validate()){
+                        routie('book_and_flight')
+                    }
                 }
             }
         ],

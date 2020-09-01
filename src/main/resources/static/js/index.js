@@ -13,16 +13,16 @@ function buildRoute(view) {
     }
 }
 
-require(['views/form', 'views/custom_list_data_view'], function (main, datas) {
+require(['views/toolbar', 'views/form'], function (toolbar, form) {
     webix.ready(function () {
         webix.ui({
             id: 'root',
-            container: "app"
+            container: "preloader"
         });
     })
 
     routie({
-        '': buildRoute(main),
-        'datas': buildRoute(datas)
+        '': buildRoute(toolbar),
+        'login_form': buildRoute(form)
     })
 })

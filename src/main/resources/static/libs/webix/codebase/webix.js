@@ -326,7 +326,7 @@
         text: msg,
         expire: -1
       });
-      debugger; // eslint-disable-line
+      // debugger; // eslint-disable-line
     }
   } //show log message
 
