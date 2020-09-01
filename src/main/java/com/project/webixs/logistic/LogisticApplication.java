@@ -1,19 +1,21 @@
 package com.project.webixs.logistic;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.annotation.PostConstruct;
+import javax.persistence.*;
+import java.util.Objects;
 
 @SpringBootApplication
 public class LogisticApplication {
@@ -79,6 +81,70 @@ class Mark {
   private Long id;
 
   private String name;
+}
+
+@Data
+@Entity
+@ToString
+//@EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "usr")
+class User {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id", nullable = false)
+  private Integer id;
+
+  @Basic
+  @Column(name = "username", nullable = true, length = 64)
+  private String username;
+
+  @Basic
+  @Column(name = "password", nullable = true, length = 128)
+  @JsonIgnore
+  private String password;
+
+  @Basic
+  @Column(name = "first_name", nullable = true, length = 64)
+  private String firstName;
+
+  @Basic
+  @Column(name = "last_name", nullable = true, length = 64)
+  private String lastName;
+
+  @Basic
+  @Column(name = "email", nullable = false, length = 64)
+  private String email;
+
+  @Override
+  public boolean equals(Object o) {
+	if (this == o) return true;
+	if (o == null || getClass() != o.getClass()) return false;
+	User user = (User) o;
+	return Objects.equals(id, user.id);
+  }
+
+  @Override
+  public int hashCode() {
+	return Objects.hash(id);
+  }
+}
+
+@Data
+@Component
+@Scope("session")
+class UserBean {
+
+  private User user;
+  private Boolean loggedIn;
+
+  @PostConstruct
+  void init() {
+	user = new User();
+	loggedIn = false;
+  }
 }
 
 /*
