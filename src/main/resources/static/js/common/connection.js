@@ -104,13 +104,13 @@ var connection = {
                 success: function (text, data, xhr) {
                     var retVal = data.json();
                     if (!retVal) {
-                        util.messages.showErrorMessage("Greška prilikom dodavanja podataka!");
+                        util.messages.showErrorMessage("Error adding data!");
                         return false;
                     }
 
                     retVal.isNew = true;
                     if(dtId == "roomDT")
-                        retVal.buildingName = obj.buildingName;// za azuriranje tabele
+                        retVal.buildingName = obj.buildingName;// to update the table
                     try {
                         $$(dtId).add(retVal);
                     } catch (ex) {
@@ -170,7 +170,7 @@ var connection = {
                         }, success: function (text, data) {
                             //if (!data.json()) {
                             if(text!="Success")
-                            {  util.messages.showErrorMessage("Greška pri izmjeni podataka!");
+                            {  util.messages.showErrorMessage("Error modifying data!");
                                 data[column] = oldValue;
                                 try {
                                     $$(dtId).updateItem(id, data);
@@ -193,7 +193,7 @@ var connection = {
                                 var url = editValidationRules[i].validateUrl.replace("{id}", id).replace("{value}", newValue);
 
                                 var editError = function () {
-                                    util.messages.showErrorMessage("Unesena vrednost već postoji!");
+                                    util.messages.showErrorMessage("The value entered already exists!");
                                     data[column] = oldValue;
                                     $$(dtId).updateItem(id, data);
                                 };
@@ -215,21 +215,21 @@ var connection = {
                                 if (/^\s*$/.test(state.value)) {
                                     state.value = state.old;
                                     data[column] = state.old;
-                                    util.messages.showErrorMessage("Polje je obavezno za unos.")
+                                    util.messages.showErrorMessage("The field is required.")
                                 }
                             }
                             else if (editValidationRules[i].rule == "isValidMac") {
                                 if (!util.validation.checkMacAddress(state.value)) {
                                     state.value = state.old;
                                     data[column] = state.old;
-                                    util.messages.showErrorMessage("Unesite validnu MAC adresu za uređaj.")
+                                    util.messages.showErrorMessage("Please enter a valid MAC address for the device.")
                                 }
                             }
                             else if (editValidationRules[i].rule == "isValidNumber") {
                                 if (!util.validation.checkPhoneNumber(state.value)) {
                                     state.value = state.old;
                                     data[column] = state.old;
-                                    util.messages.showErrorMessage("Unesite validan broj telefona.")
+                                    util.messages.showErrorMessage("Please enter a valid phone number.")
                                 }
                             }
                             else if(editValidationRules[i].rule == "checkLength") {
@@ -241,21 +241,21 @@ var connection = {
                                 if(!util.validation.checkLength(state.value, length)) {
                                     state.value = state.old;
                                     data[column] = state.old;
-                                    util.messages.showErrorMessage("Maksimalan broj karaktera je " + length + "!");
+                                    util.messages.showErrorMessage("The maximum number of characters is " + length + "!");
                                 }
                             }
                             else if(editValidationRules[i].rule == "isInteger") {
                                 if(!util.validation.isInteger(state.value)) {
                                     state.value = state.old;
                                     data[column] = state.old;
-                                    util.messages.showErrorMessage("Broj spratova mora biti cijeli broj!")
+                                    util.messages.showErrorMessage("The number of floors must be an integer!")
                                 }
                             }
                             else if(editValidationRules[i].rule == "isPositiveInteger") {
                                 if(!util.validation.isInteger(state.value) || state.value < 1) {
                                     state.value = state.old;
                                     data[column] = state.old;
-                                    util.messages.showErrorMessage("Kapacitet sale mora biti pozitivan cijeli broj!");
+                                        util.messages.showErrorMessage("Successful deletionHall capacity must be a positive integer!");
                                 }
                             }
 
@@ -279,7 +279,7 @@ var connection = {
             var deleteLink = link + "/" + id;
             util.preloader.inc();
             webix.ajax().del(deleteLink).then(function (result) {
-                util.messages.showMessage("Uspješno brisanje!");
+                util.messages.showMessage("Successful deletion!");
             }).fail(function (err) {
                 util.messages.showErrorMessage(err.responseText);
                 return false;
@@ -305,7 +305,7 @@ var connection = {
                     }
                     connection.reload();
                 } else {
-                    util.messages.showErrorMessage("Nije moguće prikupiti podešavanja.");
+                    util.messages.showErrorMessage("Unable to collect settings.");
                 }
                 util.preloader.dec();
             },
@@ -321,7 +321,7 @@ var connection = {
                     } catch (ex) {
                     }
                 } else {
-                    util.messages.showErrorMessage("Nije moguće parsirati podešavanja.");
+                    util.messages.showErrorMessage("Unable to parse settings.");
                 }
                 applySettings(viewId, true);
                 util.preloader.dec();
@@ -342,7 +342,7 @@ var connection = {
                     }
                     connection.reload();
                 } else {
-                    util.messages.showErrorMessage("Nije moguće prikupiti podešavanje: " + name);
+                    util.messages.showErrorMessage("Unable to collect setting: " + name);
                 }
                 util.preloader.dec();
                 promise.reject(false);
@@ -357,7 +357,7 @@ var connection = {
                     }
                     promise.resolve(true);
                 } else {
-                    util.messages.showErrorMessage("Nije moguće parsirati podešavanje: " + name);
+                    util.messages.showErrorMessage("Unable to parse setting: " + name);
                     promise.resolve(false);
                 }
                 util.preloader.dec();
@@ -383,7 +383,7 @@ webix.proxy.hub = {
                 }
                 connection.reload();
             }
-            util.messages.showErrorMessage("Nije moguće prikupiti podatke sa servera.");
+            util.messages.showErrorMessage("Unable to collect data from server.");
             util.preloader.dec();
         });
 

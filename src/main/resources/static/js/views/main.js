@@ -198,13 +198,12 @@ const login = function () {
             userData = data.json();
             showApp();
         }).fail(err=> {
-            util.messages.showErrorMessage("Prijavljivanje nije uspjelo!");
+            util.messages.showErrorMessage("Login failed!");
         });
     }
 };
 
 const logout = function () {
-
     webix.ajax().get("/api/user/logout", function (xhr) {
             if (xhr.status = "200") {
                 userData = null;

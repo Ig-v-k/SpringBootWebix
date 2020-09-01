@@ -1,28 +1,26 @@
 package com.project.webixs.logistic;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.extern.java.Log;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Scope;
-import org.springframework.core.GenericTypeResolver;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.annotation.PostConstruct;
@@ -31,11 +29,8 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -140,6 +135,13 @@ class User {
   }
 }
 
+@Data
+class LoginInfo {
+  private String username;
+  private String password;
+  private String companyName;
+}
+
 /*
  *   qualifier-Controllers
  */
@@ -186,6 +188,7 @@ class MarkRestController extends AbstractRestController<Mark, MarkRepository> {
   }
 }
 
+@Log
 @RestController
 @RequestMapping("/api/user")
 @Scope("request")
@@ -201,8 +204,20 @@ class UserRestController extends AbstractRestController<User, UserRepository> {
 
   @RequestMapping(value = {"/state"})
   public User checkState() throws ForbiddenException {
-	if (userBean.getLoggedIn())
+	if (userBean.getLoggedIn()) {
 	  return userBean.getUser();
+	}
+	throw new ForbiddenException("Forbidden");
+  }
+
+  @RequestMapping(value = "/login", method = RequestMethod.POST)
+  public User login(@RequestBody LoginInfo userInformation) throws ForbiddenException {
+	User user = repository.findByUsernameAndPassword(userInformation.getUsername(), userInformation.getPassword());
+	if (user != null) {
+	  userBean.setLoggedIn(true);
+	  userBean.setUser(user);
+	  return user;
+	}
 	throw new ForbiddenException("Forbidden");
   }
 }
@@ -210,10 +225,42 @@ class UserRestController extends AbstractRestController<User, UserRepository> {
 /*
  * 	qualifier-Repositories
  */
+interface UserRepositoryCustom {
+  User login(String username, String password, String companyName);
+//  List<UserLocation> getAllExtendedByCompanyIdAndStatusIdNot(Integer companyId, Integer statusId);
+}
+
 interface MarkRepository extends JpaRepository<Mark, Long> {
 }
 
-interface UserRepository extends JpaRepository<User, Integer> {
+interface UserRepository extends JpaRepository<User, Integer>, UserRepositoryCustom {
+  User findByUsernameAndPassword(String username, String password);
+}
+
+class UserRepositoryImpl extends CustomRepositoryImpl implements UserRepositoryCustom {
+  private static final String SQL_LOGIN_NO_COMPANY =
+		"SELECT id, username, first_name, last_name, registration_date, email, role_id, status_id, company_id, notification_type_id, location_id" +
+			  " FROM user WHERE username=?" +
+			  " AND password=SHA2(?,512)" +
+			  " AND company_id IS NULL;";
+  private static final String SQL_LOGIN =
+		"select u.id, username, first_name, last_name, registration_date, email, role_id, status_id, company_id, notification_type_id, location_id" +
+			  " FROM user u INNER JOIN company c on u.company_id=c.id" +
+			  " WHERE username=? AND password=SHA2(?,512) AND c.name=?;";
+
+  @Override
+  public User login(String username, String password, String companyName) {
+	if ("".equals(companyName))
+	  return (User) entityManager.createNativeQuery(SQL_LOGIN_NO_COMPANY, "UserMapping").
+			setParameter(1, username).setParameter(2, password).getResultList().stream().findFirst().orElse(null);
+	return (User) entityManager.createNativeQuery(SQL_LOGIN, "UserMapping").
+		  setParameter(1, username).setParameter(2, password).setParameter(3, companyName).getResultList().stream().findFirst().orElse(null);
+  }
+}
+
+class CustomRepositoryImpl {
+  @PersistenceContext
+  protected EntityManager entityManager;
 }
 
 /*
