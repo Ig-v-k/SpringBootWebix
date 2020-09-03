@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.extern.java.Log;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,8 +18,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -30,6 +33,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
@@ -136,6 +140,60 @@ class User {
 }
 
 @Data
+@Entity
+class Status {
+
+  @Id
+  @Column(name = "id", nullable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
+
+  @Basic
+  @Column(name = "value", nullable = false, length = 64)
+  private String value;
+
+  @Override
+  public boolean equals(Object o) {
+	if (this == o) return true;
+	if (o == null || getClass() != o.getClass()) return false;
+	Status status = (Status) o;
+	return Objects.equals(id, status.id);
+  }
+
+  @Override
+  public int hashCode() {
+	return Objects.hash(id);
+  }
+}
+
+@Data
+@Entity
+class Role {
+
+  @Id
+  @Column(name = "id", nullable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
+
+  @Basic
+  @Column(name = "value", nullable = false, length = 64)
+  private String value;
+
+  @Override
+  public boolean equals(Object o) {
+	if (this == o) return true;
+	if (o == null || getClass() != o.getClass()) return false;
+	Role role = (Role) o;
+	return Objects.equals(id, role.id);
+  }
+
+  @Override
+  public int hashCode() {
+	return Objects.hash(id);
+  }
+}
+
+@Data
 class LoginInfo {
   private String username;
   private String password;
@@ -204,6 +262,7 @@ class UserRestController extends AbstractRestController<User, UserRepository> {
 
   @RequestMapping(value = {"/state"})
   public User checkState() throws ForbiddenException {
+	userBean.setLoggedIn(true);
 	if (userBean.getLoggedIn()) {
 	  return userBean.getUser();
 	}
@@ -219,6 +278,62 @@ class UserRestController extends AbstractRestController<User, UserRepository> {
 	  return user;
 	}
 	throw new ForbiddenException("Forbidden");
+  }
+}
+
+@RestController
+@RequestMapping("api/status")
+@Scope("request")
+class StatusController extends ReadOnlyController<Status, Integer> {
+  public StatusController(JpaRepository<Status, Integer> repo) {
+	super(repo);
+  }
+}
+
+@RestController
+@RequestMapping("api/role")
+@Scope("request")
+class RoleController extends ReadOnlyController<Role, Integer> {
+  public RoleController(JpaRepository<Role, Integer> repo) {
+	super(repo);
+  }
+}
+
+class ReadOnlyController<T, ID extends Serializable> extends CommonController {
+
+  private final JpaRepository<T, ID> repo;
+
+  public ReadOnlyController(JpaRepository<T, ID> repo) {
+	this.repo = repo;
+  }
+
+  @Transactional
+  @RequestMapping(method = RequestMethod.GET)
+  public List<T> getAll() throws ForbiddenException {
+	return repo.findAll();
+  }
+
+  @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+  public T findById(@PathVariable("id") ID id) throws ForbiddenException {
+	return repo.findById(id).orElse(null);
+  }
+}
+
+class CommonController {
+
+  @Autowired
+  protected UserBean userBean;
+
+  @ExceptionHandler(BadRequestException.class)
+  @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+  public String handleException(BadRequestException e) {
+	return e.getMessage();
+  }
+
+  @ExceptionHandler(ForbiddenException.class)
+  @ResponseStatus(value = HttpStatus.FORBIDDEN)
+  public String handleException(ForbiddenException e) {
+	return e.getMessage();
   }
 }
 
