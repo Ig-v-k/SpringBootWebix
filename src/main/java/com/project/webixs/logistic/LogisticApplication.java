@@ -8,6 +8,7 @@ import lombok.ToString;
 import lombok.extern.java.Log;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,10 +18,12 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
@@ -252,8 +255,7 @@ class MarkRestController extends AbstractRestController<Mark, MarkRepository> {
 @Scope("request")
 class UserRestController extends AbstractRestController<User, UserRepository> {
 
-  final
-  UserBean userBean;
+  final UserBean userBean;
 
   public UserRestController(UserRepository repository, UserBean userBean) {
 	super(repository);
@@ -320,9 +322,6 @@ class ReadOnlyController<T, ID extends Serializable> extends CommonController {
 }
 
 class CommonController {
-
-  @Autowired
-  protected UserBean userBean;
 
   @ExceptionHandler(BadRequestException.class)
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
