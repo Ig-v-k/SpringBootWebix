@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.extern.java.Log;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,12 +16,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
@@ -144,6 +140,7 @@ class User {
 
 @Data
 @Entity
+@Table(name = "status")
 class Status {
 
   @Id
@@ -171,6 +168,7 @@ class Status {
 
 @Data
 @Entity
+@Table(name = "role")
 class Role {
 
   @Id
@@ -286,38 +284,42 @@ class UserRestController extends AbstractRestController<User, UserRepository> {
 @RestController
 @RequestMapping("api/status")
 @Scope("request")
+@Log
 class StatusController extends ReadOnlyController<Status, Integer> {
-  public StatusController(JpaRepository<Status, Integer> repo) {
-	super(repo);
+  public StatusController(JpaRepository<Status, Integer> repository) {
+	super(repository);
   }
 }
 
 @RestController
 @RequestMapping("api/role")
 @Scope("request")
+@Log
 class RoleController extends ReadOnlyController<Role, Integer> {
-  public RoleController(JpaRepository<Role, Integer> repo) {
-	super(repo);
+  public RoleController(JpaRepository<Role, Integer> repository) {
+	super(repository);
   }
 }
 
+@Log
+@Transactional(readOnly = true)
 class ReadOnlyController<T, ID extends Serializable> extends CommonController {
 
-  private final JpaRepository<T, ID> repo;
+  private final JpaRepository<T, ID> repository;
 
-  public ReadOnlyController(JpaRepository<T, ID> repo) {
-	this.repo = repo;
+  public ReadOnlyController(JpaRepository<T, ID> repository) {
+	this.repository = repository;
   }
 
   @Transactional
   @RequestMapping(method = RequestMethod.GET)
-  public List<T> getAll() throws ForbiddenException {
-	return repo.findAll();
+  public List<T> getAll() {
+	return repository.findAll();
   }
 
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-  public T findById(@PathVariable("id") ID id) throws ForbiddenException {
-	return repo.findById(id).orElse(null);
+  public T findById(@PathVariable("id") ID id) {
+	return repository.findById(id).orElse(null);
   }
 }
 
