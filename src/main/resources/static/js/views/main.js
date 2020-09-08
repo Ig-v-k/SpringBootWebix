@@ -20,17 +20,17 @@ const mainLayout = {
                             id: "appNameLabel",
                             view: "label",
                             css: "appNameLabel",
-                            width:250,
+                            width: 250,
                             label: "Vehicle Management System"
                         },
                         {
                             id: "showReportBtn",
                             view: "button",
-                            hidden:true,
+                            hidden: true,
                             type: "iconButton",
                             label: "Izvještaji",
                             icon: "bar-chart",
-                            autowidth:true,
+                            autowidth: true,
                             click: 'reportView.showGlobalReportPopup',
                         },
                         {},
@@ -41,14 +41,14 @@ const mainLayout = {
                             openAction: "click",
                             data: [
                                 {
-                                    height:100,
+                                    height: 100,
                                     value: "<span  class='fa fa-angle-down'/>",
                                     icon: "cog",
                                     submenu: [
                                         {
-                                            id:"2",
-                                            icon:"user",
-                                            value:"Profil"
+                                            id: "2",
+                                            icon: "user",
+                                            value: "Profil"
                                         },
                                         {
                                             id: "1",
@@ -110,14 +110,13 @@ const mainLayout = {
     ]
 };
 
-
-const loginLayout = {
+const custom_form = {
     id: "login",
     width: "auto",
     height: "auto",
     rows: [
         {
-            gravity:0.1
+            gravity: 0.1
         },
         {
             cols: [
@@ -126,9 +125,7 @@ const loginLayout = {
                     view: "template",
                     borderless: true,
                     height: 500,
-                    width: 500,
-                    template: '<img  src="../../img/telegroup-logo.png"/>' +
-                        '<img  src="../../img/app-logo.png"/>'
+                    width: 500
                 },
                 {
                     rows: [
@@ -178,7 +175,6 @@ const loginLayout = {
                             ]
                         },
                         {}
-
                     ]
                 },
                 {}
@@ -186,7 +182,100 @@ const loginLayout = {
             ]
         },
         {
-            gravity:0.1
+            gravity: 0.1
+        }
+    ]
+};
+
+const loginLayout = {
+    id: "login",
+    width: "auto",
+    height: "auto",
+    rows: [
+        {
+            gravity: 0.1
+        },
+        {
+            cols: [
+                {},
+                {
+                    view: "template",
+                    borderless: true,
+                    height: 500,
+                    width: 500
+                },
+                {
+                    rows: [
+                        {
+                            height: 50,
+                        },
+                        {
+                            view: "form",
+                            id: "loginForm",
+                            borderless: true,
+                            width: 400,
+                            elementsConfig: util.elementsConfig,
+                            elements: [
+                                // {
+                                //     id: "username",
+                                //     name: "username",
+                                //     view: "text",
+                                //     label: "Korisničko ime:",
+                                //     invalidMessage: "Korisničke ime je obavezno!",
+                                //     required: true
+                                // },
+                                {
+                                    id: "username",
+                                    name:"login",
+                                    view:"text",
+                                    label:'Username',
+                                    invalidMessage: "Login can not be empty",
+                                    required: true
+                                },
+                                // {
+                                //     id: "password",
+                                //     name: "password",
+                                //     view: "text",
+                                //     type: "password",
+                                //     label: "Lozinka:",
+                                //     invalidMessage: "Lozinka je obavezna!",
+                                //     required: true
+                                // },
+                                {
+                                    id: "password",
+                                    name:"password",
+                                    view:"text",
+                                    label:'Password',
+                                    invalidMessage: "Password is required",
+                                    required: true
+                                },
+                                {
+                                    id: "companyName",
+                                    name: "companyName",
+                                    view: "text",
+                                    label: "Kompanija:"
+                                },
+                                {
+                                    id: "loginBtn",
+                                    view: "button",
+                                    value: "Prijavite se",
+                                    type: "form",
+                                    click: "login",
+                                    align: "right",
+                                    hotkey: "enter",
+                                    width: 150
+                                }
+                            ]
+                        },
+                        {}
+                    ]
+                },
+                {}
+
+            ]
+        },
+        {
+            gravity: 0.1
         }
     ]
 };
@@ -194,10 +283,10 @@ const loginLayout = {
 const login = function () {
     const form = $$("loginForm");
     if (form.validate()) {
-        connection.sendAjax("POST","/api/user/login", form.getValues()).then(data=> {
+        connection.sendAjax("POST", "/api/user/login", form.getValues()).then(data => {
             userData = data.json();
             showApp();
-        }).fail(err=> {
+        }).fail(err => {
             util.messages.showErrorMessage("Login failed!");
         });
     }
@@ -205,14 +294,14 @@ const login = function () {
 
 const logout = function () {
     webix.ajax().get("/api/user/logout", function (xhr) {
-            if (xhr.status = "200") {
-                userData = null;
-                util.messages.showLogoutMessage();
-                connection.reload();
-            } else {
-                util.messages.showLogoutErrorMessage();
-                connection.reload();
-            }
+        if (xhr.status = "200") {
+            userData = null;
+            util.messages.showLogoutMessage();
+            connection.reload();
+        } else {
+            util.messages.showLogoutErrorMessage();
+            connection.reload();
+        }
     });
 };
 
@@ -220,10 +309,9 @@ const registrationLayout = {
     id: "registration",
     width: "auto",
     height: "auto",
-    userId:null,
+    userId: null,
     rows: [
-        {
-        },
+        {},
         {
             cols: [
                 {},
@@ -239,9 +327,9 @@ const registrationLayout = {
                     rows: [
                         {
                             height: 50,
-                            view:"label",
-                            css:"registration-label",
-                            label:"Registracija"
+                            view: "label",
+                            css: "registration-label",
+                            label: "Registracija"
                         },
                         {},
                         {
@@ -251,9 +339,7 @@ const registrationLayout = {
                             width: 400,
                             elementsConfig: util.elementsConfig,
                             elements: [
-                                {
-
-                                },
+                                {},
                                 {
                                     id: "username",
                                     name: "username",
@@ -310,44 +396,42 @@ const registrationLayout = {
     ]
 };
 
-const register=function () {
-    const form=$$("registrationForm");
-    if (form.validate()){
-        connection.sendAjax("POST","api/user/register",form.getValues()).then(function (result) {
+const register = function () {
+    const form = $$("registrationForm");
+    if (form.validate()) {
+        connection.sendAjax("POST", "api/user/register", form.getValues()).then(function (result) {
             util.messages.showMessage("Uspješna registracija. Sada se možete prijaviti na sistem.");
 
             setTimeout(function () {
-                connection.sendAjax("GET","api/user/state").then(data=> {
-                    return connection.sendAjax("GET","/api/user/logout");
-                }).then(value=> {
-                    const url=window.location;
-                    url.replace(url.protocol+"//"+url.host);
-                }).fail(err=> {
-                        const url=window.location;
-                        url.replace(url.protocol+"//"+url.host);
+                connection.sendAjax("GET", "api/user/state").then(data => {
+                    return connection.sendAjax("GET", "/api/user/logout");
+                }).then(value => {
+                    const url = window.location;
+                    url.replace(url.protocol + "//" + url.host);
+                }).fail(err => {
+                    const url = window.location;
+                    url.replace(url.protocol + "//" + url.host);
                 });
-            },2000);
+            }, 2000);
 
-        }).fail(err=> {
+        }).fail(err => {
             util.messages.showErrorMessage(err.responseText);
         });
     }
 };
 
-const userDialog={
-    panel:{
-        id:"userDialog",
-        view:"popup",
-        modal:true,
-        position:"center",
-        body:{
-            rows:[
+const userDialog = {
+    panel: {
+        id: "userDialog",
+        view: "popup",
+        modal: true,
+        position: "center",
+        body: {
+            rows: [
                 {
-                    view:"toolbar",
-                    css:"panelToolbar",
-                    cols:[
-
-                    ]
+                    view: "toolbar",
+                    css: "panelToolbar",
+                    cols: []
                 },
                 {
                     view: "form",
@@ -357,9 +441,9 @@ const userDialog={
                     elementsConfig: util.elementsConfig,
                     elements: [
                         {
-                            id:"id",
-                            name:"id",
-                            hidden:true
+                            id: "id",
+                            name: "id",
+                            hidden: true
                         },
                         {
                             id: "username",

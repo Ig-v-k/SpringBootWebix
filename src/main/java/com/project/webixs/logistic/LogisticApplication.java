@@ -253,16 +253,18 @@ class MarkRestController extends AbstractRestController<Mark, MarkRepository> {
 @Scope("request")
 class UserRestController extends AbstractRestController<User, UserRepository> {
 
+  private final UserRepository userRepository;
   final UserBean userBean;
 
   public UserRestController(UserRepository repository, UserBean userBean) {
 	super(repository);
+	this.userRepository = repository;
 	this.userBean = userBean;
   }
 
   @RequestMapping(value = {"/state"})
   public User checkState() throws ForbiddenException {
-	userBean.setLoggedIn(true);
+//	userBean.setLoggedIn(true);
 	if (userBean.getLoggedIn()) {
 	  return userBean.getUser();
 	}

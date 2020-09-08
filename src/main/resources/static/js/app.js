@@ -119,10 +119,12 @@ const menuEvents = {
 };
 
 const showLogin = function () {
+    console.log(" LOGIN FUNCTION -------------------------------- 1")
     const login = webix.copy(loginLayout);
+    console.log(" LOGIN FUNCTION -------------------------------- 2")
     webix.ui(login, panel);
+    console.log(" LOGIN FUNCTION -------------------------------- 3")
     panel = $$("login");
-
 };
 
 const showRegistration = function (userId) {
