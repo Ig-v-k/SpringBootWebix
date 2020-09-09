@@ -36,6 +36,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @SpringBootApplication
 @ServletComponentScan
@@ -273,7 +274,16 @@ class UserRestController extends AbstractRestController<User, UserRepository> {
 
   @RequestMapping(value = "/login", method = RequestMethod.POST)
   public User login(@RequestBody LoginInfo userInformation) throws ForbiddenException {
-	User user = repository.findByUsernameAndPassword(userInformation.getUsername(), userInformation.getPassword());
+	log.info("User request -----------------------> " + userInformation.toString());
+	User user = Optional
+		  .ofNullable(
+				userRepository.findByUsernameAndPassword(
+					  userInformation.getUsername(),
+					  userInformation.getPassword()))
+		  .orElseGet(
+		  	  () -> userRepository.findByUsername(
+		  	  	  userInformation.getUsername()));
+	log.info("User server -----------------------> " + user.toString());
 	if (user != null) {
 	  userBean.setLoggedIn(true);
 	  userBean.setUser(user);
@@ -351,8 +361,10 @@ interface UserRepositoryCustom {
 interface MarkRepository extends JpaRepository<Mark, Long> {
 }
 
-interface UserRepository extends JpaRepository<User, Integer>, UserRepositoryCustom {
-  User findByUsernameAndPassword(String username, String password);
+interface UserRepository extends JpaRepository<User, Integer> {
+  User findByUsernameAndPassword(final String username, final String password);
+
+  User findByUsername(final String username);
 }
 
 class UserRepositoryImpl extends CustomRepositoryImpl implements UserRepositoryCustom {

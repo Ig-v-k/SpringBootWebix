@@ -226,7 +226,7 @@ const loginLayout = {
                                 // },
                                 {
                                     id: "username",
-                                    name:"login",
+                                    name:"username",
                                     view:"text",
                                     label:'Username',
                                     invalidMessage: "Login can not be empty",
@@ -241,6 +241,14 @@ const loginLayout = {
                                 //     invalidMessage: "Lozinka je obavezna!",
                                 //     required: true
                                 // },
+                                // {
+                                //     id: "email",
+                                //     name:"email",
+                                //     view:"text",
+                                //     label:'E-mail address',
+                                //     invalidMessage: "Incorrect e-mail address",
+                                //     required: true
+                                // },
                                 {
                                     id: "password",
                                     name:"password",
@@ -249,16 +257,19 @@ const loginLayout = {
                                     invalidMessage: "Password is required",
                                     required: true
                                 },
+                                // {
+                                //     id: "companyName",
+                                //     name: "companyName",
+                                //     view: "text",
+                                //     label: "Kompanija:"
+                                // },
                                 {
-                                    id: "companyName",
-                                    name: "companyName",
-                                    view: "text",
-                                    label: "Kompanija:"
+
                                 },
                                 {
                                     id: "loginBtn",
                                     view: "button",
-                                    value: "Prijavite se",
+                                    value: "Submit",
                                     type: "form",
                                     click: "login",
                                     align: "right",
