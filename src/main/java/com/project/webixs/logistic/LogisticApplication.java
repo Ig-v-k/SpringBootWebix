@@ -1,18 +1,22 @@
 package com.project.webixs.logistic;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.jmx.snmp.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.extern.java.Log;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.GenericTypeResolver;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,7 +27,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.thymeleaf.expression.Objects;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.*;
@@ -31,11 +38,10 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @SpringBootApplication
@@ -51,6 +57,87 @@ public class LogisticApplication {
 /*
  *	qualifier-Entities
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+class Logger {
+  @Id
+  @Column(name = "id", nullable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
+
+  @Basic
+  @Column(name = "action_type", nullable = false, length = 128)
+  private String actionType;
+
+  @Basic
+  @Column(name = "action_details", nullable = false, length = 1024)
+  private String actionDetails;
+
+  @Basic
+  @Column(name = "table_name", nullable = false, length = 128)
+  private String tableName;
+
+  @Basic
+  @Column(name = "created", nullable = false)
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy. HH:mm", timezone = "Europe/Belgrade")
+  private java.sql.Timestamp created;
+
+  @Basic
+  @Column(name = "atomic", nullable = false)
+  private Byte atomic;
+
+  @Basic
+  @Column(name = "user_id", nullable = false)
+  private Integer userId;
+
+  @Basic
+  @Column(name = "company_id", nullable = true)
+  private Integer companyId;
+
+  public Logger(Integer userId, String actionType, String actionDetails, String tableName, Byte atomic, Integer companyId) {
+	this.userId = userId;
+	this.actionType = actionType;
+	this.actionDetails = actionDetails;
+	this.tableName = tableName;
+	this.atomic = atomic;
+	this.companyId = companyId;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+	if (this == o) return true;
+	if (o == null || getClass() != o.getClass()) return false;
+	Logger logger = (Logger) o;
+	return java.util.Objects.equals(id, logger.id);
+  }
+
+  @Override
+  public int hashCode() {
+	return java.util.Objects.hash(id);
+  }
+
+  public enum ActionType {
+	CREATE("create"),
+	UPDATE("update"),
+	READ("read"),
+	DELETE("delete");
+
+	private final String text;
+
+	ActionType(final String text) {
+	  this.text = text;
+	}
+
+	@Override
+	public String toString() {
+	  return text;
+	}
+  }
+}
+
 @Data
 @Entity
 class Mark {
@@ -76,20 +163,20 @@ class User {
   private Integer id;
 
   @Basic
-  @Column(name = "username", nullable = true, length = 64)
+  @Column(name = "username", length = 64)
   private String username;
 
   @Basic
-  @Column(name = "password", nullable = true, length = 128)
+  @Column(name = "password", length = 128)
   @JsonIgnore
   private String password;
 
   @Basic
-  @Column(name = "first_name", nullable = true, length = 64)
+  @Column(name = "first_name", length = 64)
   private String firstName;
 
   @Basic
-  @Column(name = "last_name", nullable = true, length = 64)
+  @Column(name = "last_name", length = 64)
   private String lastName;
 
   @Basic
@@ -97,7 +184,7 @@ class User {
   private Timestamp registrationDate;
 
   @Basic
-  @Column(name = "token", nullable = true, length = 64)
+  @Column(name = "token", length = 64)
   @JsonIgnore
   private String token;
 
@@ -114,15 +201,15 @@ class User {
   private Integer statusId;
 
   @Basic
-  @Column(name = "company_id", nullable = true)
+  @Column(name = "company_id")
   private Integer companyId;
 
   @Basic
-  @Column(name = "notification_type_id", nullable = true)
+  @Column(name = "notification_type_id")
   private Integer notificationTypeId;
 
   @Basic
-  @Column(name = "location_id", nullable = true)
+  @Column(name = "location_id")
   private Integer locationId;
 
   @Override
@@ -130,12 +217,12 @@ class User {
 	if (this == o) return true;
 	if (o == null || getClass() != o.getClass()) return false;
 	User user = (User) o;
-	return Objects.equals(id, user.id);
+	return java.util.Objects.equals(id, user.id);
   }
 
   @Override
   public int hashCode() {
-	return Objects.hash(id);
+	return java.util.Objects.hash(id);
   }
 }
 
@@ -158,12 +245,12 @@ class Status {
 	if (this == o) return true;
 	if (o == null || getClass() != o.getClass()) return false;
 	Status status = (Status) o;
-	return Objects.equals(id, status.id);
+	return java.util.Objects.equals(id, status.id);
   }
 
   @Override
   public int hashCode() {
-	return Objects.hash(id);
+	return java.util.Objects.hash(id);
   }
 }
 
@@ -274,7 +361,6 @@ class UserRestController extends AbstractRestController<User, UserRepository> {
 
   @RequestMapping(value = "/login", method = RequestMethod.POST)
   public User login(@RequestBody LoginInfo userInformation) throws ForbiddenException {
-	log.info("User request -----------------------> " + userInformation.toString());
 	User user = Optional
 		  .ofNullable(
 				userRepository.findByUsernameAndPassword(
@@ -283,7 +369,6 @@ class UserRestController extends AbstractRestController<User, UserRepository> {
 		  .orElseGet(
 		  	  () -> userRepository.findByUsername(
 		  	  	  userInformation.getUsername()));
-	log.info("User server -----------------------> " + user.toString());
 	if (user != null) {
 	  userBean.setLoggedIn(true);
 	  userBean.setUser(user);
@@ -296,46 +381,42 @@ class UserRestController extends AbstractRestController<User, UserRepository> {
 @RestController
 @RequestMapping("api/status")
 @Scope("request")
-@Log
 class StatusController extends ReadOnlyController<Status, Integer> {
-  public StatusController(JpaRepository<Status, Integer> repository) {
-	super(repository);
+  public StatusController(JpaRepository<Status, Integer> repo) {
+	super(repo);
   }
 }
-
 @RestController
 @RequestMapping("api/role")
 @Scope("request")
-@Log
 class RoleController extends ReadOnlyController<Role, Integer> {
-  public RoleController(JpaRepository<Role, Integer> repository) {
-	super(repository);
+  public RoleController(JpaRepository<Role, Integer> repo) {
+	super(repo);
   }
 }
 
-@Log
-@Transactional(readOnly = true)
 class ReadOnlyController<T, ID extends Serializable> extends CommonController {
+  private final JpaRepository<T, ID> repo;
 
-  private final JpaRepository<T, ID> repository;
-
-  public ReadOnlyController(JpaRepository<T, ID> repository) {
-	this.repository = repository;
+  public ReadOnlyController(JpaRepository<T, ID> repo) {
+	this.repo = repo;
   }
 
   @Transactional
   @RequestMapping(method = RequestMethod.GET)
-  public List<T> getAll() {
-	return repository.findAll();
+  public List<T> getAll() throws ForbiddenException {
+	return repo.findAll();
   }
 
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-  public T findById(@PathVariable("id") ID id) {
-	return repository.findById(id).orElse(null);
+  public T findById(@PathVariable("id") ID id) throws ForbiddenException {
+	return repo.findById(id).orElse(null);
   }
 }
 
 class CommonController {
+  @Autowired
+  protected UserBean userBean;
 
   @ExceptionHandler(BadRequestException.class)
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
@@ -350,9 +431,118 @@ class CommonController {
   }
 }
 
+class GenericController<T, ID extends Serializable> extends GenericLogger<T> {
+
+  private JpaRepository<T, ID> repo;
+  @PersistenceContext
+  private EntityManager entityManager;
+
+  @Value("${badRequest.insert}")
+  private String badRequestInsert;
+
+  @Value("${badRequest.update}")
+  private String badRequestUpdate;
+
+  @Value("${badRequest.delete}")
+  private String badRequestDelete;
+
+
+  public GenericController(JpaRepository<T, ID> repo) {
+	this.repo = repo;
+  }
+
+  @Transactional
+  @RequestMapping(method = RequestMethod.GET)
+  public List<T> getAll() throws ForbiddenException {
+	return repo.findAll();
+  }
+
+  @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+  public T findById(@PathVariable("id") ID id) throws ForbiddenException {
+	return repo.findById(id).orElse(null);
+  }
+
+  @Transactional
+  @RequestMapping(method = RequestMethod.POST)
+  @ResponseStatus(HttpStatus.CREATED)
+  public T insert(@RequestBody T object) throws BadRequestException, ForbiddenException {
+	T ret = null;
+	if ((ret = repo.saveAndFlush(object)) != null) {
+	  entityManager.refresh(ret);
+	  logCreateAction(object);
+	  return ret;
+	}
+	throw new BadRequestException(badRequestInsert);
+  }
+
+  @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+  public String update(@PathVariable ID id, @RequestBody T object) throws BadRequestException, ForbiddenException {
+	T oldObject = cloner.deepClone(repo.findById(id).orElse(null));
+	if (repo.saveAndFlush(object) != null) {
+	  logUpdateAction(object, oldObject);
+	  return "Success";
+	}
+	throw new BadRequestException(badRequestUpdate);
+  }
+
+  @RequestMapping(value = {"/{id}"}, method = RequestMethod.DELETE)
+  public String delete(@PathVariable ID id) throws BadRequestException, ForbiddenException {
+	try {
+	  T object = repo.findById(id).orElse(null);
+	  repo.deleteById(id);
+	  logDeleteAction(object);
+	  return "Success";
+	} catch (Exception ex) {
+	  ex.printStackTrace();
+	  throw new BadRequestException(badRequestDelete);
+	}
+  }
+}
+
+public class GenericLogger<T> extends CommonController {
+
+  protected Cloner cloner;
+  private Class<T> type;
+  private HttpSession httpSession;
+  @Autowired
+  private LoggerRepository loggerRepository;
+  @Value("${loggerConfig.createMessage}")
+  private String createMessage;
+  @Value("${loggerConfig.updateMessage}")
+  private String updateMessage;
+  @Value("${loggerConfig.deleteMessage}")
+  private String deleteMessage;
+
+  public GenericLogger() {
+	cloner = new Cloner();
+	this.type = (Class<T>) GenericTypeResolver.resolveTypeArgument(getClass(), GenericLogger.class);
+	this.httpSession = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getSession(true);
+  }
+
+  public void logCreateAction(T object) {
+	loggerRepository.saveAndFlush(new Logger(((UserBean) httpSession.getAttribute("userBean")).getUser().getId(), Logger.ActionType.CREATE.toString(), createMessage.replace("{entity}", object.toString()), type.getSimpleName(), (byte) 1, ((UserBean) httpSession.getAttribute("userBean")).getUser().getCompanyId()));
+  }
+
+  public void logUpdateAction(T newObject, T oldObject) {
+	loggerRepository.saveAndFlush(new Logger(((UserBean) httpSession.getAttribute("userBean")).getUser().getId(), Logger.ActionType.UPDATE.toString(), updateMessage.replace("{oldEntity}", oldObject.toString()).replace("{newEntity}", newObject.toString()), type.getSimpleName(), (byte) 1, ((UserBean) httpSession.getAttribute("userBean")).getUser().getCompanyId()));
+  }
+
+  public void logDeleteAction(T object) {
+	loggerRepository.saveAndFlush(new Logger(((UserBean) httpSession.getAttribute("userBean")).getUser().getId(), Logger.ActionType.DELETE.toString(), deleteMessage.replace("{entity}", object.toString()), type.getSimpleName(), (byte) 1, ((UserBean) httpSession.getAttribute("userBean")).getUser().getCompanyId()));
+  }
+
+  public void logSpecificAction(String actionType, String actionDetails, String tableName) {
+	loggerRepository.saveAndFlush(new Logger(((UserBean) httpSession.getAttribute("userBean")).getUser().getId(), actionType, actionDetails, tableName, (byte) 0, ((UserBean) httpSession.getAttribute("userBean")).getUser().getCompanyId()));
+  }
+
+}
+
 /*
  * 	qualifier-Repositories
  */
+public interface LoggerRepository extends JpaRepository<Logger, Integer>, LoggerRepositoryCustom {
+}
+
 interface UserRepositoryCustom {
   User login(String username, String password, String companyName);
 //  List<UserLocation> getAllExtendedByCompanyIdAndStatusIdNot(Integer companyId, Integer statusId);
@@ -393,12 +583,32 @@ class CustomRepositoryImpl {
   protected EntityManager entityManager;
 }
 
+interface Deletable {
+  Byte getDeleted();
+  void setDeleted(Byte deleted);
+}
+
+interface DeletableRepository<T extends Deletable> {
+  List<T> getAllByDeletedIs(Byte deleted);
+}
+
+interface HasCompanyId {
+  Integer getCompanyId();
+}
+
+interface HasCompanyIdAndDeletableRepository<T extends HasCompanyId & Deletable> extends DeletableRepository<T> {
+  List<T> getAllByCompanyIdAndDeletedIs(Integer companyId, Byte deleted);
+}
+
+interface HasCompanyIdRepository<T extends HasCompanyId> {
+  List<T> getAllByCompanyId(Integer companyId);
+}
+
 /*
  * 	qualifier-Utils
  */
 @WebFilter("/api/*")
 class AccessFilter implements Filter {
-
   @Value("#{'${path.public}'.split(',')}")
   private List<String> publicPaths;
 
