@@ -1,5 +1,6 @@
 package com.project.webixs.logistic.controller.abstractLogger;
 
+import com.project.webixs.logistic.common.CommonController;
 import com.project.webixs.logistic.model.Logger;
 import com.project.webixs.logistic.repository.LoggerRepository;
 import com.project.webixs.logistic.session.UserBean;
