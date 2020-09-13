@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("role")
 public class RoleController extends ReadOnlyController<Role, Integer> {
-
   public RoleController(JpaRepository<Role, Integer> repo) {
 	super(repo);
   }
-
 }
