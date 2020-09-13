@@ -1,0 +1,32 @@
+{
+  "properties": [
+    {
+      "name": "loggerConfig.createMessage",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "loggerConfig.updateMessage",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "loggerConfig.deleteMessage",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "badRequest.insert",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "badRequest.update",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "badRequest.delete",
+      "type": "java.lang.String"
+    },
+    {
+      "name": "path.public",
+      "type": "java.lang.String"
+    }
+  ]
+}
