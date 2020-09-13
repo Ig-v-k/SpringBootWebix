@@ -3,6 +3,8 @@ package com.project.webixs.logistic.controller.abstractController;
 import com.project.webixs.logistic.common.exception.BadRequestException;
 import com.project.webixs.logistic.common.exception.ForbiddenException;
 import com.project.webixs.logistic.controller.abstractLogger.AbstractLogger;
+import com.project.webixs.logistic.session.UserBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
@@ -14,11 +16,16 @@ import javax.persistence.PersistenceContext;
 import java.io.Serializable;
 import java.util.List;
 
+@SuppressWarnings("SpringJavaAutowiringInspection")
 public class AbstractController<T, ID extends Serializable> extends AbstractLogger<T> {
 
   protected JpaRepository<T, ID> repo;
+
   @PersistenceContext
   private EntityManager entityManager;
+
+  @Autowired
+  protected UserBean userBean;
 
   @Value("${badRequest.insert}")
   private String badRequestInsert;
@@ -29,21 +36,18 @@ public class AbstractController<T, ID extends Serializable> extends AbstractLogg
   @Value("${badRequest.delete}")
   private String badRequestDelete;
 
-
-
   public AbstractController(JpaRepository<T, ID> repo) {
 	this.repo = repo;
   }
 
   @Transactional
   @RequestMapping(method = RequestMethod.GET)
-  public List<T> getAll()throws BadRequestException, ForbiddenException {
+  public List<T> getAll() throws BadRequestException, ForbiddenException {
 	return repo.findAll();
   }
 
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-  public
-  T findById(@PathVariable("id") ID id) throws BadRequestException, ForbiddenException {
+  public T findById(@PathVariable("id") ID id) throws BadRequestException, ForbiddenException {
 	return repo.findById(id).orElse(null);
   }
 
