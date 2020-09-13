@@ -2,6 +2,7 @@ package com.project.webixs.logistic;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.rits.cloning.Cloner;
 import com.sun.jmx.snmp.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,7 +31,6 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-import org.thymeleaf.expression.Objects;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.*;
@@ -41,7 +41,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @SpringBootApplication
@@ -57,6 +60,43 @@ public class LogisticApplication {
 /*
  *	qualifier-Entities
  */
+@SqlResultSetMapping(
+	  name = "LoggerMapping",
+	  classes = @ConstructorResult(
+			targetClass = LoggerCompanyUserRole.class,
+			columns = {
+				  @ColumnResult(name = "id", type = Integer.class),
+				  @ColumnResult(name = "action_type", type = String.class),
+				  @ColumnResult(name = "action_details", type = String.class),
+				  @ColumnResult(name = "table_name", type = String.class),
+				  @ColumnResult(name = "created", type = Date.class),
+				  @ColumnResult(name = "atomic", type = Byte.class),
+				  @ColumnResult(name = "user_id", type = Integer.class),
+				  @ColumnResult(name = "company_id", type = Integer.class),
+				  @ColumnResult(name = "company_name", type = String.class),
+				  @ColumnResult(name = "username", type = String.class),
+				  @ColumnResult(name = "role", type = String.class)
+
+			}
+	  )
+)
+@MappedSuperclass
+@Data
+@NoArgsConstructor
+class LoggerCompanyUserRole extends Logger implements Serializable {
+
+  private String companyName;
+  private String username;
+  private String role;
+
+  public LoggerCompanyUserRole(Integer id, String actionType, String actionDetails, String tableName, Date created, Byte atomic, Integer userId, Integer companyId, String companyName, String username, String role) {
+	super(id, actionType, actionDetails, tableName, (java.sql.Timestamp) created, atomic, userId, companyId);
+	this.companyName = companyName;
+	this.username = username;
+	this.role = role;
+  }
+}
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -151,7 +191,6 @@ class Mark {
 @Data
 @Entity
 @ToString
-//@EqualsAndHashCode
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "usr")
@@ -278,7 +317,7 @@ class Role {
 
   @Override
   public int hashCode() {
-	return Objects.hash(id);
+	return java.util.Objects.hash(id);
   }
 }
 
@@ -367,8 +406,8 @@ class UserRestController extends AbstractRestController<User, UserRepository> {
 					  userInformation.getUsername(),
 					  userInformation.getPassword()))
 		  .orElseGet(
-		  	  () -> userRepository.findByUsername(
-		  	  	  userInformation.getUsername()));
+				() -> userRepository.findByUsername(
+					  userInformation.getUsername()));
 	if (user != null) {
 	  userBean.setLoggedIn(true);
 	  userBean.setUser(user);
@@ -386,6 +425,7 @@ class StatusController extends ReadOnlyController<Status, Integer> {
 	super(repo);
   }
 }
+
 @RestController
 @RequestMapping("api/role")
 @Scope("request")
@@ -499,7 +539,7 @@ class GenericController<T, ID extends Serializable> extends GenericLogger<T> {
   }
 }
 
-public class GenericLogger<T> extends CommonController {
+class GenericLogger<T> extends CommonController {
 
   protected Cloner cloner;
   private Class<T> type;
@@ -537,10 +577,63 @@ public class GenericLogger<T> extends CommonController {
 
 }
 
+abstract class GenericDeletableController<T extends Deletable, ID extends Serializable> extends GenericController<T, ID> {
+
+  private DeletableRepository<T> repo;
+  @Value("${badRequest.update}")
+  private String badRequestUpdate;
+
+  @Value("${badRequest.delete}")
+  private String badRequestDelete;
+
+
+  public GenericDeletableController(JpaRepository<T, ID> repo) {
+	super(repo);
+	if (repo instanceof DeletableRepository)
+	  this.repo = (DeletableRepository) repo;
+	else throw new RuntimeException("Repository must implement " + DeletableRepository.class.getSimpleName());
+  }
+
+  @Override
+  public List<T> getAll() throws ForbiddenException {
+	return repo.getAllByDeletedIs((byte) 0);
+  }
+
+  @Override
+  public T findById(@PathVariable ID id) throws ForbiddenException {
+	T object = super.findById(id);
+	if (object == null || object.getDeleted().equals((byte) 1))
+	  object = null;
+	return object;
+  }
+
+  @Override
+  public String update(@PathVariable ID id, @RequestBody T object) throws BadRequestException, ForbiddenException {
+	if (findById(id) == null)
+	  throw new BadRequestException(badRequestUpdate);
+	return super.update(id, object);
+  }
+
+
+  @Override
+  public String delete(@PathVariable ID id) throws BadRequestException, ForbiddenException {
+	T object = findById(id);
+	if (object == null)
+	  throw new BadRequestException(badRequestDelete);
+	object.setDeleted((byte) 1);
+	logDeleteAction(object);
+	return "Success";
+  }
+}
+
 /*
  * 	qualifier-Repositories
  */
-public interface LoggerRepository extends JpaRepository<Logger, Integer>, LoggerRepositoryCustom {
+interface StatusRepository extends JpaRepository<Status, Integer> {
+}
+
+
+interface LoggerRepository extends JpaRepository<Logger, Integer>, LoggerRepositoryCustom {
 }
 
 interface UserRepositoryCustom {
@@ -578,6 +671,13 @@ class UserRepositoryImpl extends CustomRepositoryImpl implements UserRepositoryC
   }
 }
 
+interface ExpenseRepositoryCustom {
+  BigDecimal sumValueByVehicleIdAndCompanyIdAndDeletedAndExpenseTypeAndDateBetween(Integer vehicleId, Integer companyId, Byte deleted, Integer expenseTypeId, java.sql.Timestamp startDate, java.sql.Timestamp endDate);
+
+  BigDecimal sumValueByCompanyIdAndDeletedAndExpenseTypeAndDateBetween(Integer companyId, Byte deleted, Integer expenseTypeId, java.sql.Timestamp startDate, java.sql.Timestamp endDate);
+}
+
+
 class CustomRepositoryImpl {
   @PersistenceContext
   protected EntityManager entityManager;
@@ -585,6 +685,7 @@ class CustomRepositoryImpl {
 
 interface Deletable {
   Byte getDeleted();
+
   void setDeleted(Byte deleted);
 }
 
@@ -603,6 +704,52 @@ interface HasCompanyIdAndDeletableRepository<T extends HasCompanyId & Deletable>
 interface HasCompanyIdRepository<T extends HasCompanyId> {
   List<T> getAllByCompanyId(Integer companyId);
 }
+
+class ExpenseRepositoryImpl extends CustomRepositoryImpl implements ExpenseRepositoryCustom {
+  private static final String SQL_SUM_VEHICLE = "select sum(value) from expense where vehicle_id=? and company_id=? and deleted=? and expense_type_id=? and date between ? and ?;";
+  private static final String SQL_SUM_COMPANY = "select sum(value) from expense where company_id=? and deleted=? and expense_type_id=? and date between ? and ?;";
+
+  @Override
+  public BigDecimal sumValueByVehicleIdAndCompanyIdAndDeletedAndExpenseTypeAndDateBetween(Integer vehicleId, Integer companyId, Byte deleted, Integer expenseTypeId, java.sql.Timestamp startDate, java.sql.Timestamp endDate) {
+	return (BigDecimal) entityManager.createNativeQuery(SQL_SUM_VEHICLE).setParameter(1, vehicleId).setParameter(2, companyId).setParameter(3, deleted).setParameter(4, expenseTypeId).
+		  setParameter(5, startDate).setParameter(6, endDate).getSingleResult();
+  }
+
+  @Override
+  public BigDecimal sumValueByCompanyIdAndDeletedAndExpenseTypeAndDateBetween(Integer companyId, Byte deleted, Integer expenseTypeId, java.sql.Timestamp startDate, java.sql.Timestamp endDate) {
+	return (BigDecimal) entityManager.createNativeQuery(SQL_SUM_COMPANY).setParameter(1, companyId).setParameter(2, deleted).setParameter(3, expenseTypeId).
+		  setParameter(4, startDate).setParameter(5, endDate).getSingleResult();
+  }
+}
+
+interface LoggerRepositoryCustom {
+  List<LoggerCompanyUserRole> getExtendedAll();
+
+  List<LoggerCompanyUserRole> getExtendedByCompany(Integer companyId);
+}
+
+class LoggerRepositoryImpl extends CustomRepositoryImpl implements LoggerRepositoryCustom {
+
+  private static final String SQL_GET_ALL = "select l.id, l.action_type, l.action_details, l.table_name, l.created, l.user_id, l.atomic," +
+		" l.company_id,c.name as company_name,u.username,r.value as role from logger l inner join user u on l.user_id = u.id" +
+		" inner join role r on u.role_id = r.id left join company c on l.company_id = c.id order by l.created desc;";
+
+  private static final String SQL_GET_ALL_BY_COMPANY = "select l.id, l.action_type, l.action_details, l.table_name, l.created, l.user_id, l.atomic," +
+		" l.company_id,c.name as company_name,u.username,r.value as role from logger l inner join user u on l.user_id = u.id" +
+		" inner join role r on u.role_id = r.id inner join company c on l.company_id = c.id where l.company_id=? order by l.created desc";
+
+
+  @Override
+  public List<LoggerCompanyUserRole> getExtendedAll() {
+	return entityManager.createNativeQuery(SQL_GET_ALL, "LoggerMapping").getResultList();
+  }
+
+  @Override
+  public List<LoggerCompanyUserRole> getExtendedByCompany(Integer companyId) {
+	return entityManager.createNativeQuery(SQL_GET_ALL_BY_COMPANY, "LoggerMapping").setParameter(1, companyId).getResultList();
+  }
+}
+
 
 /*
  * 	qualifier-Utils
