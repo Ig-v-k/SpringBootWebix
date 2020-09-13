@@ -6,8 +6,9 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
 
-@Entity
 @Data
+@Entity
+@Table(name = "usr")
 public class User {
   @Id
   @Column(name = "id", nullable = false)
