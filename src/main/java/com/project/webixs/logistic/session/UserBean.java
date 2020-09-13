@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
+@Data
 @Component
 @Scope("session")
-@Data
 public class UserBean {
 
   private User user;
