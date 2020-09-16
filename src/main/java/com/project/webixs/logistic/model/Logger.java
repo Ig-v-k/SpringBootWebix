@@ -5,11 +5,13 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Objects;
 
 @Data
 @Entity
 @NoArgsConstructor
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Logger {
   @Id
   @Column(name = "id", nullable = false)
@@ -50,6 +52,17 @@ public class Logger {
 	this.actionDetails = actionDetails;
 	this.tableName = tableName;
 	this.atomic = atomic;
+	this.companyId = companyId;
+  }
+
+  public Logger(Integer id, String actionType, String actionDetails, String tableName, Date created, Byte atomic, Integer userId, Integer companyId) {
+	this.id = id;
+	this.actionType = actionType;
+	this.actionDetails = actionDetails;
+	this.tableName = tableName;
+	this.created = created==null ? null:new Timestamp(created.getTime());
+	this.atomic = atomic;
+	this.userId = userId;
 	this.companyId = companyId;
   }
 

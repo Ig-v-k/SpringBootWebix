@@ -16,7 +16,6 @@ import javax.persistence.PersistenceContext;
 import java.io.Serializable;
 import java.util.List;
 
-@SuppressWarnings("SpringJavaAutowiringInspection")
 public class AbstractController<T, ID extends Serializable> extends AbstractLogger<T> {
 
   private final JpaRepository<T, ID> repo;

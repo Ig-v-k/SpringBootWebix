@@ -1,5 +1,6 @@
 package com.project.webixs.logistic.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -20,6 +21,7 @@ public class User {
   private String username;
 
   @Basic
+  @JsonIgnore
   @Column(name = "password", length = 128)
   private String password;
 
@@ -32,14 +34,11 @@ public class User {
   private String lastName;
 
   @Basic
-  @Column(name = "photo")
-  private byte[] photo;
-
-  @Basic
   @Column(name = "registration_date", nullable = false)
   private Timestamp registrationDate;
 
   @Basic
+  @JsonIgnore
   @Column(name = "token", length = 64)
   private String token;
 
@@ -64,7 +63,7 @@ public class User {
   private Integer notificationTypeId;
 
   @Basic
-  @Column(name = "location_id", nullable = false)
+  @Column(name = "location_id")
   private Integer locationId;
 
   @Override
@@ -73,6 +72,23 @@ public class User {
 	if (o == null || getClass() != o.getClass()) return false;
 	User user = (User) o;
 	return Objects.equals(id, user.id);
+  }
+
+  @Override
+  public String toString() {
+    return "User{" +
+          "id=" + id +
+          ", username='" + username + '\'' +
+          ", firstName='" + firstName + '\'' +
+          ", lastName='" + lastName + '\'' +
+          ", registrationDate=" + registrationDate +
+          ", email='" + email + '\'' +
+          ", roleId=" + roleId +
+          ", statusId=" + statusId +
+          ", companyId=" + companyId +
+          ", notificationTypeId=" + notificationTypeId +
+          ", locationId=" + locationId +
+          '}';
   }
 
   @Override
