@@ -19,7 +19,7 @@ import java.util.List;
 @SuppressWarnings("SpringJavaAutowiringInspection")
 public class AbstractController<T, ID extends Serializable> extends AbstractLogger<T> {
 
-  protected JpaRepository<T, ID> repo;
+  private final JpaRepository<T, ID> repo;
 
   @PersistenceContext
   private EntityManager entityManager;
@@ -56,7 +56,7 @@ public class AbstractController<T, ID extends Serializable> extends AbstractLogg
   @ResponseStatus(HttpStatus.CREATED)
   public T insert(@RequestBody T object) throws BadRequestException, ForbiddenException {
 	T ret = null;
-	if ((ret = repo.saveAndFlush(object)) != null) {
+	if (null != (ret = repo.saveAndFlush(object))) {
 	  entityManager.refresh(ret);
 	  logCreateAction(object);
 	  return ret;
@@ -67,7 +67,7 @@ public class AbstractController<T, ID extends Serializable> extends AbstractLogg
   @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
   public String update(@PathVariable ID id, @RequestBody T object) throws BadRequestException, ForbiddenException {
 	T oldObject = cloner.deepClone(repo.findById(id).orElse(null));
-	if (repo.saveAndFlush(object) != null) {
+	if (null != repo.saveAndFlush(object)) {
 	  logUpdateAction(object, oldObject);
 	  return "Success";
 	}
@@ -79,6 +79,9 @@ public class AbstractController<T, ID extends Serializable> extends AbstractLogg
 	try {
 	  T object = repo.findById(id).orElse(null);
 	  repo.deleteById(id);
+
+	  assert object != null;
+
 	  logDeleteAction(object);
 	  return "Success";
 	} catch (Exception ex) {
