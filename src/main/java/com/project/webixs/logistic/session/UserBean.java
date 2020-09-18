@@ -18,10 +18,6 @@ public class UserBean {
   @PostConstruct
   void init(){
 	user=new User();
-	user.setId(1);
-	user.setCompanyId(1);
-	user.setRoleId(1);
-
 	loggedIn=false;
   }
 }

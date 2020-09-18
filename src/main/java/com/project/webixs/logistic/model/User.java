@@ -1,15 +1,41 @@
 package com.project.webixs.logistic.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Objects;
 
+@SqlResultSetMapping(
+      name = "UserMapping",
+      classes = @ConstructorResult(
+            targetClass = User.class,
+            columns = {
+                  @ColumnResult(name="id",type = Integer.class),
+                  @ColumnResult(name="username",type = String.class),
+                  @ColumnResult(name="first_name",type = String.class),
+                  @ColumnResult(name="last_name",type = String.class),
+                  @ColumnResult(name="registration_date", type = Date.class),
+                  @ColumnResult(name="email",type = String.class),
+                  @ColumnResult(name="role_id",type = Integer.class),
+                  @ColumnResult(name = "status_id",type = Integer.class),
+                  @ColumnResult(name="company_id",type = Integer.class),
+                  @ColumnResult(name = "notification_type_id",type=Integer.class),
+                  @ColumnResult(name = "location_id",type = Integer.class),
+
+
+            }
+      )
+)
 @Data
 @Entity
 @Table(name = "usr")
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
   @Id
   @Column(name = "id", nullable = false)
