@@ -2,171 +2,171 @@ const mainLayout = {
     id: "app",
     width: "auto",
     height: "auto",
-    // rows: [
-    //     {
-    //         cols: [
-    //             {
-    //                 view: "template",
-    //                 width: 240,
-    //                 css: "logoInside",
-    //                 template: '<img  src="../../img/telegroup-logo.png"/>'
-    //             },
-    //             {
-    //                 view: "toolbar",
-    //                 css: "mainToolbar",
-    //                 height: 50,
-    //                 cols: [
-    //                     {
-    //                         id: "appNameLabel",
-    //                         view: "label",
-    //                         css: "appNameLabel",
-    //                         width: 250,
-    //                         label: "Vehicle Management System"
-    //                     },
-    //                     {
-    //                         id: "showReportBtn",
-    //                         view: "button",
-    //                         hidden: true,
-    //                         type: "iconButton",
-    //                         label: "Izvještaji",
-    //                         icon: "bar-chart",
-    //                         autowidth: true,
-    //                         click: 'reportView.showGlobalReportPopup',
-    //                     },
-    //                     {},
-    //                     {
-    //                         view: "menu",
-    //                         id: "userMenu",
-    //                         width: 60,
-    //                         openAction: "click",
-    //                         data: [
-    //                             {
-    //                                 height: 100,
-    //                                 value: "<span  class='fa fa-angle-down'/>",
-    //                                 icon: "cog",
-    //                                 submenu: [
-    //                                     {
-    //                                         id: "2",
-    //                                         icon: "user",
-    //                                         value: "Profil"
-    //                                     },
-    //                                     {
-    //                                         id: "1",
-    //                                         icon: "sign-out",
-    //                                         value: "Odjavite se",
-    //                                     }
-    //                                 ]
-    //                             }
-    //                         ],
-    //                         on: {
-    //                             onMenuItemClick: function (id) {
-    //                                 switch (id) {
-    //                                     case "2":
-    //                                         profileView.showProfilePopup();
-    //                                         break;
-    //                                     case "1":
-    //                                         logout();
-    //                                         break;
-    //
-    //                                 }
-    //                             }
-    //                         }
-    //                     }
-    //                 ]
-    //             }
-    //         ]
-    //     },
-    //     {
-    //         id: "main",
-    //         cols: [
-    //             {
-    //                 rows: [
-    //                     {
-    //                         id: "mainMenu",
-    //                         css: "mainMenu",
-    //                         view: "sidebar",
-    //                         gravity: 0.01,
-    //                         minWidth: 41,
-    //                         collapsed: true
-    //                     },
-    //                     {
-    //                         id: "sidebarBelow",
-    //                         css: "sidebar-below",
-    //                         view: "template",
-    //                         template: "",
-    //                         height: 50,
-    //                         gravity: 0.01,
-    //                         minWidth: 41,
-    //                         width: 41,
-    //                         type: "clean"
-    //                     }
-    //                 ]
-    //             },
-    //             {
-    //                 id: "emptyRightPanel"
-    //             }
-    //         ]
-    //     }
-    // ]
-
     rows: [
         {
-            view: "toolbar",
-            padding:3,
-            elements: [
+            cols: [
                 {
-                    view: "button",
-                    type: "icon",
-                    icon: "mdi mdi-menu",
-                    width: 37,
-                    align: "left",
-                    css: "app_button",
-                    click: function(){
-                        $$("$sidebar1").toggle();
-                    }
+                    view: "template",
+                    width: 240,
+                    css: "logoInside",
+                    template: '<img  src="../../img/telegroup-logo.png"/>'
                 },
                 {
-                    view: "label",
-                    label: "My App"
-                },
-                {
+                    view: "toolbar",
+                    css: "mainToolbar",
+                    height: 50,
+                    cols: [
+                        {
+                            id: "appNameLabel",
+                            view: "label",
+                            css: "appNameLabel",
+                            width: 250,
+                            label: "Vehicle Management System"
+                        },
+                        {
+                            id: "showReportBtn",
+                            view: "button",
+                            hidden: true,
+                            type: "iconButton",
+                            label: "Izvještaji",
+                            icon: "bar-chart",
+                            autowidth: true,
+                            click: 'reportView.showGlobalReportPopup',
+                        },
+                        {},
+                        {
+                            view: "menu",
+                            id: "userMenu",
+                            width: 60,
+                            openAction: "click",
+                            data: [
+                                {
+                                    height: 100,
+                                    value: "<span  class='fa fa-angle-down'/>",
+                                    icon: "cog",
+                                    submenu: [
+                                        {
+                                            id: "2",
+                                            icon: "user",
+                                            value: "Profil"
+                                        },
+                                        {
+                                            id: "1",
+                                            icon: "sign-out",
+                                            value: "Odjavite se",
+                                        }
+                                    ]
+                                }
+                            ],
+                            on: {
+                                onMenuItemClick: function (id) {
+                                    switch (id) {
+                                        case "2":
+                                            profileView.showProfilePopup();
+                                            break;
+                                        case "1":
+                                            logout();
+                                            break;
 
-                },
-                {
-                    view: "button",
-                    type: "icon",
-                    width: 45,
-                    css: "app_button",
-                    icon: "mdi mdi-comment",
-                    badge:4
-                },
-                {
-                    view: "button",
-                    type: "icon",
-                    width: 45,
-                    css: "app_button",
-                    icon: "mdi mdi-bell",
-                    badge:10
+                                    }
+                                }
+                            }
+                        }
+                    ]
                 }
             ]
         },
         {
-            cols:[
+            id: "main",
+            cols: [
                 {
-                    view: "sidebar",
-                    data: menu_data,
-                    on:{
-                        onAfterSelect: function(id){
-                            webix.message("Selected: "+this.getItem(id).value)
+                    rows: [
+                        {
+                            id: "mainMenu",
+                            css: "mainMenu",
+                            view: "sidebar",
+                            gravity: 0.01,
+                            minWidth: 41,
+                            collapsed: true
+                        },
+                        {
+                            id: "sidebarBelow",
+                            css: "sidebar-below",
+                            view: "template",
+                            template: "",
+                            height: 50,
+                            gravity: 0.01,
+                            minWidth: 41,
+                            width: 41,
+                            type: "clean"
                         }
-                    }
+                    ]
                 },
                 {
-                    template: ""
+                    id: "emptyRightPanel"
                 }
             ]
         }
     ]
+
+    // rows: [
+    //     {
+    //         view: "toolbar",
+    //         padding:3,
+    //         elements: [
+    //             {
+    //                 view: "button",
+    //                 type: "icon",
+    //                 icon: "mdi mdi-menu",
+    //                 width: 37,
+    //                 align: "left",
+    //                 css: "app_button",
+    //                 click: function(){
+    //                     $$("$sidebar1").toggle();
+    //                 }
+    //             },
+    //             {
+    //                 view: "label",
+    //                 label: "My App"
+    //             },
+    //             {
+    //
+    //             },
+    //             {
+    //                 view: "button",
+    //                 type: "icon",
+    //                 width: 45,
+    //                 css: "app_button",
+    //                 icon: "mdi mdi-comment",
+    //                 badge:4
+    //             },
+    //             {
+    //                 view: "button",
+    //                 type: "icon",
+    //                 width: 45,
+    //                 css: "app_button",
+    //                 icon: "mdi mdi-bell",
+    //                 badge:10
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         cols:[
+    //             {
+    //                 view: "sidebar",
+    //                 data: menu_data,
+    //                 on:{
+    //                     onAfterSelect: function(id){
+    //                         webix.message("Selected: "+this.getItem(id).value)
+    //                     }
+    //                 }
+    //             },
+    //             {
+    //                 template: ""
+    //             }
+    //         ]
+    //     }
+    // ]
 
 };
 

@@ -27,6 +27,18 @@
     {
       "name": "path.public",
       "type": "java.lang.String"
+    },
+    {
+      "name": "role.system_admin",
+      "type": "java.lang.Integer"
+    },
+    {
+      "name": "role.company_admin",
+      "type": "java.lang.Integer"
+    },
+    {
+      "name": "role.user",
+      "type": "java.lang.Integer"
     }
   ]
 }
