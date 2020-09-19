@@ -11,25 +11,25 @@ import java.util.Date;
 import java.util.Objects;
 
 @SqlResultSetMapping(
-      name = "UserMapping",
-      classes = @ConstructorResult(
-            targetClass = User.class,
-            columns = {
-                  @ColumnResult(name="id",type = Integer.class),
-                  @ColumnResult(name="username",type = String.class),
-                  @ColumnResult(name="first_name",type = String.class),
-                  @ColumnResult(name="last_name",type = String.class),
-                  @ColumnResult(name="registration_date", type = Date.class),
-                  @ColumnResult(name="email",type = String.class),
-                  @ColumnResult(name="role_id",type = Integer.class),
-                  @ColumnResult(name = "status_id",type = Integer.class),
-                  @ColumnResult(name="company_id",type = Integer.class),
-                  @ColumnResult(name = "notification_type_id",type=Integer.class),
-                  @ColumnResult(name = "location_id",type = Integer.class),
+	  name = "UserMapping",
+	  classes = @ConstructorResult(
+			targetClass = User.class,
+			columns = {
+				  @ColumnResult(name = "id", type = Integer.class),
+				  @ColumnResult(name = "username", type = String.class),
+				  @ColumnResult(name = "first_name", type = String.class),
+				  @ColumnResult(name = "last_name", type = String.class),
+				  @ColumnResult(name = "registration_date", type = Date.class),
+				  @ColumnResult(name = "email", type = String.class),
+				  @ColumnResult(name = "role_id", type = Integer.class),
+				  @ColumnResult(name = "status_id", type = Integer.class),
+				  @ColumnResult(name = "company_id", type = Integer.class),
+				  @ColumnResult(name = "notification_type_id", type = Integer.class),
+				  @ColumnResult(name = "location_id", type = Integer.class),
 
 
-            }
-      )
+			}
+	  )
 )
 @Data
 @Entity
@@ -102,19 +102,19 @@ public class User {
 
   @Override
   public String toString() {
-    return "User{" +
-          "id=" + id +
-          ", username='" + username + '\'' +
-          ", firstName='" + firstName + '\'' +
-          ", lastName='" + lastName + '\'' +
-          ", registrationDate=" + registrationDate +
-          ", email='" + email + '\'' +
-          ", roleId=" + roleId +
-          ", statusId=" + statusId +
-          ", companyId=" + companyId +
-          ", notificationTypeId=" + notificationTypeId +
-          ", locationId=" + locationId +
-          '}';
+	return "User{" +
+		  "id=" + id +
+		  ", username='" + username + '\'' +
+		  ", firstName='" + firstName + '\'' +
+		  ", lastName='" + lastName + '\'' +
+		  ", registrationDate=" + registrationDate +
+		  ", email='" + email + '\'' +
+		  ", roleId=" + roleId +
+		  ", statusId=" + statusId +
+		  ", companyId=" + companyId +
+		  ", notificationTypeId=" + notificationTypeId +
+		  ", locationId=" + locationId +
+		  '}';
   }
 
   @Override

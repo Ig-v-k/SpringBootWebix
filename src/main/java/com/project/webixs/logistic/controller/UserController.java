@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/user")
 @Scope("request")
-public class UserController extends AbstractController<User,Integer> {
+public class UserController extends AbstractController<User, Integer> {
 
   private final UserRepository repository;
 
@@ -27,7 +27,7 @@ public class UserController extends AbstractController<User,Integer> {
 
   public UserController(UserRepository repo) {
 	super(repo);
-	repository=repo;
+	repository = repo;
   }
 
   @Override
@@ -36,7 +36,7 @@ public class UserController extends AbstractController<User,Integer> {
   }
 
   @RequestMapping("/{companyId}/{roleId}")
-  public List<User> getByCompanyIdAndRoleId(@PathVariable Integer companyId, @PathVariable Integer roleId) throws ForbiddenException{
+  public List<User> getByCompanyIdAndRoleId(@PathVariable Integer companyId, @PathVariable Integer roleId) throws ForbiddenException {
 	if (!userBean.getUser().getRoleId().equals(roleSystemAdmin) && roleId.equals(roleSystemAdmin))
 	  throw new ForbiddenException("Forbidden");
 	return repository.getAllByCompanyIdAndRoleId(companyId.equals(0) ? null : companyId, roleId);
@@ -59,10 +59,10 @@ public class UserController extends AbstractController<User,Integer> {
 
   @RequestMapping(value = "/login", method = RequestMethod.POST)
   public User login(@RequestBody LoginInfo userInformation) throws ForbiddenException {
-    log.info("a user from request ----------> " + userInformation.toString());
-	User user = repository.login(userInformation.getUsername(),userInformation.getPassword(),userInformation.getCompanyName());
+	log.info("a user from request ----------> " + userInformation.toString());
+	User user = repository.login(userInformation.getUsername(), userInformation.getPassword(), userInformation.getCompanyName());
 	log.info("a user from database ----------> " + user.toString());
-	if (null != user){
+	if (null != user) {
 	  userBean.setLoggedIn(true);
 	  userBean.setUser(user);
 	  return user;
