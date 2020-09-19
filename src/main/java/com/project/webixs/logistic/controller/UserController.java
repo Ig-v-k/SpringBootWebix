@@ -60,7 +60,6 @@ public class UserController extends AbstractController<User,Integer> {
   @RequestMapping(value = "/login", method = RequestMethod.POST)
   public User login(@RequestBody LoginInfo userInformation) throws ForbiddenException {
 	User user = repository.login(userInformation.getUsername(), userInformation.getPassword());
-	log.info("a user from database ----------> " + user.toString());
 	if (null != user){
 	  userBean.setLoggedIn(true);
 	  userBean.setUser(user);

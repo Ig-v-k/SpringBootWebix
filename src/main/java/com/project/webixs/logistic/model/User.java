@@ -17,6 +17,7 @@ import java.util.Objects;
 			columns = {
 				  @ColumnResult(name = "id", type = Integer.class),
 				  @ColumnResult(name = "username", type = String.class),
+				  @ColumnResult(name = "password", type = String.class),
 				  @ColumnResult(name = "first_name", type = String.class),
 				  @ColumnResult(name = "last_name", type = String.class),
 				  @ColumnResult(name = "registration_date", type = Date.class),
@@ -26,8 +27,6 @@ import java.util.Objects;
 				  @ColumnResult(name = "company_id", type = Integer.class),
 				  @ColumnResult(name = "notification_type_id", type = Integer.class),
 				  @ColumnResult(name = "location_id", type = Integer.class),
-
-
 			}
 	  )
 )
@@ -35,7 +34,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "usr")
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 public class User {
   @Id
   @Column(name = "id", nullable = false)
@@ -47,7 +46,7 @@ public class User {
   private String username;
 
   @Basic
-  @JsonIgnore
+//  @JsonIgnore
   @Column(name = "password", length = 128)
   private String password;
 
@@ -91,6 +90,21 @@ public class User {
   @Basic
   @Column(name = "location_id")
   private Integer locationId;
+
+  public User(Integer id, String password, String username, String firstName, String lastName, Date registrationDate, String email, Integer roleId, Integer statusId, Integer companyId, Integer notificationTypeId, Integer locationId) {
+	this.id = id;
+	this.username = username;
+	this.password = password;
+	this.firstName = firstName;
+	this.lastName = lastName;
+	this.registrationDate = registrationDate == null ? null : new Timestamp(registrationDate.getTime());
+	this.email = email;
+	this.roleId = roleId;
+	this.statusId = statusId;
+	this.companyId = companyId;
+	this.notificationTypeId = notificationTypeId;
+	this.locationId = locationId;
+  }
 
   @Override
   public boolean equals(Object o) {
