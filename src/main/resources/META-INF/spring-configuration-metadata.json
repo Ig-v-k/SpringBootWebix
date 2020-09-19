@@ -25,6 +25,10 @@
       "type": "java.lang.String"
     },
     {
+      "name": "path.prefix",
+      "type": "java.lang.String"
+    },,
+    {
       "name": "path.public",
       "type": "java.lang.String"
     },
