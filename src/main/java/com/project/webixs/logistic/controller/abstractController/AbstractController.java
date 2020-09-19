@@ -41,19 +41,19 @@ public class AbstractController<T, ID extends Serializable> extends AbstractLogg
 
   @Transactional
   @RequestMapping(method = RequestMethod.GET)
-  public List<T> getAll() throws BadRequestException, ForbiddenException {
+  public List<T> getAll() throws ForbiddenException {
 	return repo.findAll();
   }
 
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-  public T findById(@PathVariable("id") ID id) throws BadRequestException, ForbiddenException {
+  public T findById(@PathVariable("id") ID id) {
 	return repo.findById(id).orElse(null);
   }
 
   @Transactional
   @RequestMapping(method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.CREATED)
-  public T insert(@RequestBody T object) throws BadRequestException, ForbiddenException {
+  public T insert(@RequestBody T object) throws BadRequestException {
 	T ret = null;
 	if (null != (ret = repo.saveAndFlush(object))) {
 	  entityManager.refresh(ret);
@@ -64,7 +64,7 @@ public class AbstractController<T, ID extends Serializable> extends AbstractLogg
   }
 
   @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-  public String update(@PathVariable ID id, @RequestBody T object) throws BadRequestException, ForbiddenException {
+  public String update(@PathVariable ID id, @RequestBody T object) throws BadRequestException {
 	T oldObject = cloner.deepClone(repo.findById(id).orElse(null));
 	if (null != repo.saveAndFlush(object)) {
 	  logUpdateAction(object, oldObject);
@@ -74,7 +74,7 @@ public class AbstractController<T, ID extends Serializable> extends AbstractLogg
   }
 
   @RequestMapping(value = {"/{id}"}, method = RequestMethod.DELETE)
-  public String delete(@PathVariable ID id) throws BadRequestException, ForbiddenException {
+  public String delete(@PathVariable ID id) throws BadRequestException {
 	try {
 	  T object = repo.findById(id).orElse(null);
 	  repo.deleteById(id);
