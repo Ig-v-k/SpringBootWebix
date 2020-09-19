@@ -2,6 +2,7 @@ package com.project.webixs.logistic.common;
 
 import com.project.webixs.logistic.common.exception.ForbiddenException;
 import com.project.webixs.logistic.controller.abstractController.AbstractController;
+import com.project.webixs.logistic.model.LoginInfo;
 import com.project.webixs.logistic.model.User;
 import com.project.webixs.logistic.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +18,7 @@ import java.util.List;
 @Scope("request")
 public class UserController extends AbstractController<User,Integer> {
 
-  private UserRepository repository;
+  private final UserRepository repository;
 
   @Value(value = "${role.system_admin}")
   private Integer roleSystemAdmin;
