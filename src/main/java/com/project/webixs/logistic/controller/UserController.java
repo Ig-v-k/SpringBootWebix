@@ -1,10 +1,11 @@
-package com.project.webixs.logistic.common;
+package com.project.webixs.logistic.controller;
 
 import com.project.webixs.logistic.common.exception.ForbiddenException;
 import com.project.webixs.logistic.controller.abstractController.AbstractController;
 import com.project.webixs.logistic.model.LoginInfo;
 import com.project.webixs.logistic.model.User;
 import com.project.webixs.logistic.repository.UserRepository;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+@Log
 @RestController
-@RequestMapping("user")
+@RequestMapping("api/user")
 @Scope("request")
 public class UserController extends AbstractController<User,Integer> {
 
@@ -37,7 +39,7 @@ public class UserController extends AbstractController<User,Integer> {
   public List<User> getByCompanyIdAndRoleId(@PathVariable Integer companyId, @PathVariable Integer roleId) throws ForbiddenException{
 	if (!userBean.getUser().getRoleId().equals(roleSystemAdmin) && roleId.equals(roleSystemAdmin))
 	  throw new ForbiddenException("Forbidden");
-	return repository.getAllByCompanyIdAndRoleId(companyId.equals(0)?null:companyId,roleId);
+	return repository.getAllByCompanyIdAndRoleId(companyId.equals(0) ? null : companyId, roleId);
   }
 
   @RequestMapping(value = {"/state"})
@@ -57,8 +59,10 @@ public class UserController extends AbstractController<User,Integer> {
 
   @RequestMapping(value = "/login", method = RequestMethod.POST)
   public User login(@RequestBody LoginInfo userInformation) throws ForbiddenException {
+    log.info("a user from request ----------> " + userInformation.toString());
 	User user = repository.login(userInformation.getUsername(),userInformation.getPassword(),userInformation.getCompanyName());
-	if (user!=null){
+	log.info("a user from database ----------> " + user.toString());
+	if (null != user){
 	  userBean.setLoggedIn(true);
 	  userBean.setUser(user);
 	  return user;
