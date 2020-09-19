@@ -44,7 +44,6 @@ public class AccessFilter implements Filter {
 	} else {
 	  filterChain.doFilter(servletRequest, servletResponse);
 	}
-	return;
   }
 
   @Override
