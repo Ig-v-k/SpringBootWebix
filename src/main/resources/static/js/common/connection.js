@@ -70,7 +70,6 @@ var connection = {
         return promise;
     },
 
-
     //attach triggers to datatables
     attachAjaxEvents: function (dtId, link, customInsert, preserveId, editValidationRules) {
         $$(dtId).attachEvent("onBeforeAdd", function (index, obj) {
@@ -121,7 +120,6 @@ var connection = {
 
             return false;
         });
-
 
         $$(dtId).attachEvent("onBeforeEditStop", function (state, editor, ignore) {
                 if (ignore) {

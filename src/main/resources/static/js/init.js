@@ -1,23 +1,23 @@
 var scriptsToLoad = [
-    {
-        "section": "webix",
-        "path": "webix/codebase/",
-        "files": ["webix", "dhtmlxscheduler", "i18n/sr", "locale/locale_sr"]
-    },
-    {
-        "section": "extensions",
-        "path": "webix/extensions/",
-        "files": ["sidebar/sidebar", "dhtmlxscheduler_readonly", "dhtmlxscheduler_limit", "FileSaver"]
-    },
+    // {
+    //     "section": "webix",
+    //     "path": "webix/codebase/",
+    //     "files": ["webix", "dhtmlxscheduler", "i18n/sr", "locale/locale_sr"]
+    // },
+    // {
+    //     "section": "extensions",
+    //     "path": "webix/extensions/",
+    //     "files": ["sidebar/sidebar", "dhtmlxscheduler_readonly", "dhtmlxscheduler_limit", "FileSaver"]
+    // },
     {
         "section": "common",
         "path": "js/common/",
-        "files": ["connection", "util", "view_components", "pagination_setup","properties"]
+        "files": ["connection", "util", "view_components", "pagination_setup", "properties"]
     },
     {
         "section": "views",
         "path": "js/views/",
-        "files": ["logger", "report", "company", "dashboard", "vehicle", "user","vehicle_details","reservation","profile","main"]
+        "files": ["logger", "report", "dashboard", "user", "reservation", "profile", "main"]
     },
     {
         "section": "core",
@@ -28,10 +28,13 @@ var scriptsToLoad = [
 
 var cssToLoad = [
     "https://fonts.googleapis.com/css?family=PT+Sans:400,400i,700,700i",
-    "webix/codebase/webix-orange.css",
-    "css/extended-orange.css",
-    "webix/extensions/sidebar/sidebar-orange.css",
-    "webix/codebase/dhtmlxscheduler_material.css"
+    "https://cdn.webix.com/edge/webix.css",
+    // "https://cdn.webix.com/edge/webix.js",
+    "https://cdn.materialdesignicons.com/2.7.94/css/materialdesignicons.css?v=7.4.6",
+    // "webix/codebase/webix-orange.css",
+    // "css/extended-orange.css",
+    // "webix/extensions/sidebar/sidebar-orange.css",
+    // "webix/codebase/dhtmlxscheduler_material.css"
 ];
 
 var linearJsDownloadOrder = [];

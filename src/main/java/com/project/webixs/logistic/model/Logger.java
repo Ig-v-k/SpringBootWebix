@@ -3,11 +3,11 @@ package com.project.webixs.logistic.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import sun.util.resources.TimeZoneNames;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.Date;
+import java.util.Objects;
 
 @Data
 @Entity
