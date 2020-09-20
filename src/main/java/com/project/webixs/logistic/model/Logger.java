@@ -1,12 +1,13 @@
 package com.project.webixs.logistic.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import sun.util.resources.TimeZoneNames;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 
 @Data
 @Entity
@@ -23,7 +24,7 @@ public class Logger {
   private String actionType;
 
   @Basic
-  @Column(name = "action_details", nullable = false, length = 128)
+  @Column(name = "action_details", nullable = false, length = 1024)
   private String actionDetails;
 
   @Basic
@@ -32,6 +33,7 @@ public class Logger {
 
   @Basic
   @Column(name = "created", nullable = false)
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm")
   private Timestamp created;
 
   @Basic
@@ -43,7 +45,7 @@ public class Logger {
   private Integer userId;
 
   @Basic
-  @Column(name = "company_id", nullable = true)
+  @Column(name = "company_id")
   private Integer companyId;
 
   public Logger(Integer userId, String actionType, String actionDetails, String tableName, Byte atomic, Integer companyId) {
