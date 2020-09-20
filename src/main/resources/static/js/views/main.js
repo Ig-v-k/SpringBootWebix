@@ -423,7 +423,7 @@ const mainLayout = {
                     }
                 },
                 {
-                    template: ""
+                    template: "asdasdasdsad"
                 }
             ]
         }

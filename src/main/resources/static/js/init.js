@@ -69,7 +69,6 @@ function loadScript(index) {
     document.getElementsByTagName("head")[0].appendChild(script);
 }
 
-
 var loadScripts = function () {
     //lineralize configuration
     for (i = 0; i < scriptsToLoad.length; i++) {
@@ -82,7 +81,6 @@ var loadScripts = function () {
 
     if (linearJsDownloadOrder.length > 0) loadScript(0);
 };
-
 
 var loadCss = function () {
     for (i = 0; i < cssToLoad.length; i++) {
