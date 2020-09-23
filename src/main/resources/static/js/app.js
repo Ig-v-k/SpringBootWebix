@@ -98,6 +98,16 @@ const checkState=function(){
 //     }
 // };
 
+const showRegistration = function (userId) {
+    const registration=webix.copy(registrationLayout);
+    webix.ui(registration,panel);
+    panel=$$("registration");
+    $$("registrationForm").setValues({
+        id:userId
+    });
+
+};
+
 const showLogin = function () {
     const login = webix.copy(loginLayout);
     webix.ui(login, panel);

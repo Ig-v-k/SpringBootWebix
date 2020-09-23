@@ -316,8 +316,102 @@ const mainLayout = {
                     }
                 },
                 {
-                    template: "asdasdasdsad"
+                    template: ""
                 }
+            ]
+        }
+    ]
+};
+
+const registrationLayout = {
+    id: "registration",
+    width: "auto",
+    height: "auto",
+    userId:null,
+    rows: [
+        {
+        },
+        {
+            cols: [
+                {},
+                {
+                    view: "template",
+                    borderless: true,
+                    height: 500,
+                    width: 500,
+                    template: '<img  src="../../img/telegroup-logo.png"/>' +
+                        '<img  src="../../img/app-logo.png"/>'
+                },
+                {
+                    rows: [
+                        {
+                            height: 50,
+                            view:"label",
+                            css:"registration-label",
+                            label:"Registration"
+                        },
+                        {},
+                        {
+                            view: "form",
+                            id: "registrationForm",
+                            borderless: true,
+                            width: 400,
+                            elementsConfig: util.elementsConfig,
+                            elements: [
+                                {
+
+                                },
+                                {
+                                    id: "username",
+                                    name: "username",
+                                    view: "text",
+                                    label: "User name:",
+                                    invalidMessage: "Username is required!",
+                                    required: true
+                                },
+                                {
+                                    id: "firstName",
+                                    name: "firstName",
+                                    view: "text",
+                                    label: "Ime:",
+                                    invalidMessage: "Username is required...!",
+                                    required: true
+                                },
+                                {
+                                    id: "lastName",
+                                    name: "lastName",
+                                    view: "text",
+                                    label: "Surname:",
+                                    invalidMessage: "Last name is required!",
+                                    required: true
+                                },
+                                {
+                                    id: "password",
+                                    name: "password",
+                                    view: "text",
+                                    type: "password",
+                                    label: "Password:",
+                                    invalidMessage: "Password is required!",
+                                    required: true
+                                },
+
+                                {
+                                    id: "registrationBtn",
+                                    view: "button",
+                                    value: "Register",
+                                    type: "form",
+                                    click: "register",
+                                    align: "right",
+                                    hotkey: "enter",
+                                    width: 150
+                                }
+                            ]
+                        },
+                        {}
+
+                    ]
+                },
+                {}
             ]
         }
     ]
@@ -461,7 +555,6 @@ const custom_form = {
                     ]
                 },
                 {}
-
             ]
         },
         {
