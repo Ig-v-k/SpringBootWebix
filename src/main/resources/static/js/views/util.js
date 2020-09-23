@@ -38,4 +38,33 @@ var util = {
             });
         }
     },
+
+    preloader: {
+        state: 0,
+
+        inc: function () {
+            if (this.state === 0) {
+                document.getElementById("preloader").style.display = "block";
+            }
+            this.state++;
+        },
+
+        dec: function () {
+            if (this.state === 0) return;
+            this.state--;
+            if (this.state === 0) {
+                document.getElementById("preloader").style.display = "none";
+            }
+        },
+
+        reset: function () {
+            this.state = 0;
+            document.getElementById("preloader").style.display = "none";
+        }
+    },
+
+    elementsConfig: {
+        labelWidth: 140,
+        bottomPadding: 18
+    },
 }

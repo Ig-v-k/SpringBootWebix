@@ -1,8 +1,3 @@
-const MENU_STATES = {
-    COLLAPSED: 0,
-    EXPANDED: 1
-};
-let menuState = MENU_STATES.COLLAPSED;
 let userData = null;
 let panel = {id: "empty"};
 let rightPanel = null;
@@ -59,6 +54,7 @@ const menuCompanyUser=[
 // };
 
 const init = function () {
+    console.log("------------------init----------------------->");
     if (!webix.env.touch && webix.ui.scrollSize) webix.CustomScroll.init();
     webix.i18n.parseFormat = ("%d.%m.%Y.");
 
@@ -84,6 +80,7 @@ const init = function () {
 };
 
 const checkState=function(){
+    console.log("------------------checkState----------------------->");
     connection.sendAjax("GET","api/user/state").then(data=> {
         userData = data.json();
         showApp();
@@ -109,17 +106,20 @@ const showRegistration = function (userId) {
 };
 
 const showLogin = function () {
+    console.log("------------------showLogin----------------------->");
     const login = webix.copy(loginLayout);
     webix.ui(login, panel);
     panel = $$("login");
 };
 
 const showApp = function () {
+    console.log("------------------showApp----------------------->");
     const main = webix.copy(mainLayout);
     webix.ui(main, panel);
 };
 
 const preloadDependencies = function () {
+    console.log("------------------preloadDependency----------------------->");
     const promises=[];
     promises.push(connection.sendAjax("GET","api/role").then(data=> {
         const roles = [];

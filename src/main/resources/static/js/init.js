@@ -47,8 +47,8 @@ function loadScript(index) {
     script.charset = "utf-8";
     if (script.readyState) {  //IE
         script.onreadystatechange = function () {
-            if (script.readyState == "loaded" ||
-                script.readyState == "complete") {
+            if (script.readyState === "loaded" ||
+                script.readyState === "complete") {
                 script.onreadystatechange = null;
                 console.log("Loaded script " + url + " (" + (index + 1) + "/" + linearJsDownloadOrder.length + ")");
                 if (index + 1 < linearJsDownloadOrder.length) {
