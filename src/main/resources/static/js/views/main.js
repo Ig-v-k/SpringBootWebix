@@ -263,8 +263,11 @@ var menu_data_multi = [
 
 const mainLayout = {
     id: "app",
-    width: "auto",
-    height: "auto",
+    type:
+        {
+            width: "auto",
+            height: "auto",
+        },
     rows: [
         {
             view: "toolbar",
@@ -419,8 +422,12 @@ const registrationLayout = {
 
 const loginLayout = {
     id: "login",
-    width: "auto",
-    height: "auto",
+    // type:
+    //     {
+    //         width: "auto",
+    //         height: "auto",
+    //     },
+    // sizeToContent: true,
     rows: [
         {
             gravity: 0.1
