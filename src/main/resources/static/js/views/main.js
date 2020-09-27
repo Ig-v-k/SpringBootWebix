@@ -1,46 +1,45 @@
 var menu_data = [
     {
         id: "dashboard", icon: "mdi mdi-view-dashboard", value: "Dashboards", data: [
-            {id: "dashboard1", value: "Dashboard 1"},
-            {id: "dashboard2", value: "Dashboard 2"}
+            {id: "dashboard1", value: "Dashboard 1"}
         ]
     },
-    {
-        id: "layouts", icon: "mdi mdi-view-column", value: "Layouts", data: [
-            {id: "accordions", value: "Accordions"},
-            {id: "portlets", value: "Portlets"}
-        ]
-    },
+    // {
+    //     id: "layouts", icon: "mdi mdi-view-column", value: "Layouts", data: [
+    //         {id: "accordions", value: "Accordions"},
+    //         {id: "portlets", value: "Portlets"}
+    //     ]
+    // },
     {
         id: "tables", icon: "mdi mdi-table", value: "Data Tables", data: [
             {id: "tables1", value: "Datatable"},
-            {id: "tables2", value: "TreeTable"},
-            {id: "tables3", value: "Pivot"}
+            // {id: "tables2", value: "TreeTable"},
+            // {id: "tables3", value: "Pivot"}
         ]
     },
-    {
-        id: "uis", icon: "mdi mdi-puzzle", value: "UI Components", data: [
-            {id: "dataview", value: "DataView"},
-            {id: "list", value: "List"},
-            {id: "menu", value: "Menu"},
-            {id: "tree", value: "Tree"}
-        ]
-    },
-    {
-        id: "tools", icon: "mdi mdi-calendar", value: "Tools", data: [
-            {id: "kanban", value: "Kanban Board"},
-            {id: "pivot", value: "Pivot Chart"},
-            {id: "scheduler", value: "Calendar"}
-        ]
-    },
-    {
-        id: "forms", icon: "mdi mdi-pencil", value: "Forms", data: [
-            {id: "buttons", value: "Buttons"},
-            {id: "selects", value: "Select boxes"},
-            {id: "inputs", value: "Inputs"}
-        ]
-    },
-    {id: "demo", icon: "mdi mdi-book", value: "Documentation"}
+    // {
+    //     id: "uis", icon: "mdi mdi-puzzle", value: "UI Components", data: [
+    //         {id: "dataview", value: "DataView"},
+    //         {id: "list", value: "List"},
+    //         {id: "menu", value: "Menu"},
+    //         {id: "tree", value: "Tree"}
+    //     ]
+    // },
+    // {
+    //     id: "tools", icon: "mdi mdi-calendar", value: "Tools", data: [
+    //         {id: "kanban", value: "Kanban Board"},
+    //         {id: "pivot", value: "Pivot Chart"},
+    //         {id: "scheduler", value: "Calendar"}
+    //     ]
+    // },
+    // {
+    //     id: "forms", icon: "mdi mdi-pencil", value: "Forms", data: [
+    //         {id: "buttons", value: "Buttons"},
+    //         {id: "selects", value: "Select boxes"},
+    //         {id: "inputs", value: "Inputs"}
+    //     ]
+    // },
+    // {id: "demo", icon: "mdi mdi-book", value: "Documentation"}
 ];
 
 var menu_data_multi = [
@@ -263,11 +262,11 @@ var menu_data_multi = [
 
 const mainLayout = {
     id: "app",
-    type:
-        {
-            width: "auto",
-            height: "auto",
-        },
+    // type:
+    //     {
+    //         width: "auto",
+    //         height: "auto",
+    //     },
     rows: [
         {
             view: "toolbar",
@@ -286,7 +285,7 @@ const mainLayout = {
                 },
                 {
                     view: "label",
-                    label: "My App"
+                    label: "Logistic"
                 },
                 {},
                 {
@@ -304,7 +303,14 @@ const mainLayout = {
                     css: "app_button",
                     icon: "mdi mdi-bell",
                     badge: 10
-                }
+                },
+                {
+                    view: "button",
+                    type: "icon",
+                    width: 45,
+                    css: "app_button",
+                    icon: "mdi mdi-logout",
+                },
             ]
         },
         {
@@ -330,7 +336,7 @@ const registrationLayout = {
     id: "registration",
     width: "auto",
     height: "auto",
-    userId:null,
+    userId: null,
     rows: [
         {
         },
