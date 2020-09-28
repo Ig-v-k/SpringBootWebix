@@ -289,6 +289,7 @@ const mainLayout = {
                 },
                 {},
                 {
+                    id: "1_User",
                     view: "button",
                     type: "icon",
                     width: 45,
@@ -297,6 +298,7 @@ const mainLayout = {
                     badge: 4
                 },
                 {
+                    id: "2_User",
                     view: "button",
                     type: "icon",
                     width: 45,
@@ -305,11 +307,16 @@ const mainLayout = {
                     badge: 10
                 },
                 {
+                    id: "3_User",
                     view: "button",
                     type: "icon",
                     width: 45,
                     css: "app_button",
                     icon: "mdi mdi-logout",
+                    click: function () {
+                        logout();
+                        return false;
+                    }
                 },
             ]
         },
@@ -338,8 +345,7 @@ const registrationLayout = {
     height: "auto",
     userId: null,
     rows: [
-        {
-        },
+        {},
         {
             cols: [
                 {},
@@ -355,9 +361,9 @@ const registrationLayout = {
                     rows: [
                         {
                             height: 50,
-                            view:"label",
-                            css:"registration-label",
-                            label:"Registration"
+                            view: "label",
+                            css: "registration-label",
+                            label: "Registration"
                         },
                         {},
                         {
@@ -367,9 +373,7 @@ const registrationLayout = {
                             width: 400,
                             elementsConfig: util.elementsConfig,
                             elements: [
-                                {
-
-                                },
+                                {},
                                 {
                                     id: "username",
                                     name: "username",
@@ -586,4 +590,17 @@ const login = function () {
             util.messages.showErrorMessage("Login failed!");
         });
     }
+};
+
+const logout = function () {
+    webix.ajax().get("/api/user/logout", function (xhr) {
+        if (xhr.status === "200") {
+            userData = null;
+            util.messages.showLogoutMessage();
+            connection.reload();
+        } else {
+            util.messages.showLogoutErrorMessage();
+            connection.reload();
+        }
+    });
 };

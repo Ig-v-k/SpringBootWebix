@@ -5,7 +5,7 @@ import com.project.webixs.logistic.controller.abstractController.AbstractControl
 import com.project.webixs.logistic.model.LoginInfo;
 import com.project.webixs.logistic.model.User;
 import com.project.webixs.logistic.repository.UserRepository;
-import lombok.extern.java.Log;
+import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-@Log
+@CommonsLog
 @RestController
 @RequestMapping("api/user")
 @Scope("request")
