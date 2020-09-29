@@ -54,7 +54,6 @@ const menuCompanyUser=[
 // };
 
 const init = function () {
-    console.log("------------------init----------------------->");
     if (!webix.env.touch && webix.ui.scrollSize) webix.CustomScroll.init();
     webix.i18n.parseFormat = ("%d.%m.%Y.");
 
@@ -80,8 +79,7 @@ const init = function () {
 };
 
 const checkState=function(){
-    console.log("------------------checkState----------------------->");
-    connection.sendAjax("GET","api/user/state").then(data=> {
+    connection.sendAjax("GET","api/user/state").then(data => {
         userData = data.json();
         showApp();
     }).fail(()=> {
@@ -106,20 +104,18 @@ const showRegistration = function (userId) {
 };
 
 const showLogin = function () {
-    console.log("------------------showLogin----------------------->");
     const login = webix.copy(loginLayout);
     webix.ui(login, panel);
     panel = $$("login");
 };
 
 const showApp = function () {
-    console.log("------------------showApp----------------------->");
     const main = webix.copy(mainLayout);
     webix.ui(main, panel);
+    hideIconsOfTheRole();
 };
 
 const preloadDependencies = function () {
-    console.log("------------------preloadDependency----------------------->");
     const promises=[];
     promises.push(connection.sendAjax("GET","api/role").then(data=> {
         const roles = [];
@@ -135,7 +131,6 @@ const preloadDependencies = function () {
     promises.push(connection.sendAjax("GET","api/status").then(data=> {
         const status = [];
         const array = [];
-
         data.json().forEach(obj=> {
             status[obj.id] = obj.value;
             array.push(obj);

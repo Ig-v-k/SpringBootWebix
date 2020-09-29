@@ -46,7 +46,7 @@ public class User {
   private String username;
 
   @Basic
-//  @JsonIgnore
+  @JsonIgnore
   @Column(name = "password", length = 128)
   private String password;
 
@@ -63,11 +63,6 @@ public class User {
   private Timestamp registrationDate;
 
   @Basic
-  @JsonIgnore
-  @Column(name = "token", length = 64)
-  private String token;
-
-  @Basic
   @Column(name = "email", nullable = false, length = 64)
   private String email;
 
@@ -82,6 +77,11 @@ public class User {
   @Basic
   @Column(name = "company_id")
   private Integer companyId;
+
+//  @Basic
+//  @JsonIgnore
+//  @Column(name = "token", length = 64)
+//  private String token;
 
   @Basic
   @Column(name = "notification_type_id", nullable = false)

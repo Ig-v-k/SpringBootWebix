@@ -262,11 +262,7 @@ var menu_data_multi = [
 
 const mainLayout = {
     id: "app",
-    // type:
-    //     {
-    //         width: "auto",
-    //         height: "auto",
-    //     },
+    type: "space",
     rows: [
         {
             view: "toolbar",
@@ -287,7 +283,6 @@ const mainLayout = {
                     view: "label",
                     label: "Logistic"
                 },
-                {},
                 {
                     id: "1_User",
                     view: "button",
@@ -315,12 +310,14 @@ const mainLayout = {
                     icon: "mdi mdi-logout",
                     click: function () {
                         logout();
-                        return false;
                     }
                 },
-            ]
+            ],
+
         },
         {
+            autoheight:true,
+            type: "wide",
             cols: [
                 {
                     view: "sidebar",
@@ -331,9 +328,7 @@ const mainLayout = {
                         }
                     }
                 },
-                {
-                    template: ""
-                }
+                {}
             ]
         }
     ]
@@ -407,7 +402,6 @@ const registrationLayout = {
                                     invalidMessage: "Password is required!",
                                     required: true
                                 },
-
                                 {
                                     id: "registrationBtn",
                                     view: "button",
@@ -604,3 +598,14 @@ const logout = function () {
         }
     });
 };
+
+const hideIconsOfTheRole = function () {
+    if (userData.statusId === 0 || userData.statusId === null) {
+        $$("1_User").$view.style.visibility = 'hidden';
+        $$("2_User").$view.style.visibility = 'hidden';
+
+        // $$("1_User").$view.style.display = 'none';
+        // $$("2_User").$view.style.display = 'none';
+    }
+    return false;
+}
