@@ -332,36 +332,60 @@ const mainLayout = {
                     }
                 },
                 {
-                    rows:[
+                    rows: [
                         {
-                            view:"toolbar",
-                            elements:[
-                                { width:4 },
-                                { view:"label", label:"Transactions", width:150 },
-                                { minWidth:4 },
+                            view: "toolbar",
+                            elements: [
+                                {width: 4},
+                                {view: "label", label: "Transactions", width: 150},
+                                {minWidth: 4},
                                 {
-                                    view:"segmented", minWidth:333,
-                                    tooltip:obj => {
+                                    view: "segmented", minWidth: 333,
+                                    tooltip: obj => {
                                         return `${"Display"} ${obj.value.toLowerCase()} ${obj.value.indexOf("Payments") === 0 ? "" : "transactions"}`;
                                     },
-                                    options:[
-                                        { id:"all", value:"All" },
-                                        { id:"0", value:"Payments" },
-                                        { id:"1", value:"Incoming" }
+                                    options: [
+                                        {id: "all", value: "All"},
+                                        {id: "0", value: "Payments"},
+                                        {id: "1", value: "Incoming"}
                                     ],
-                                    on:{
+                                    on: {
                                         // onChange:newv => this.app.callEvent("tactions:filter",[newv])
                                     }
                                 },
-                                { width:6 }
+                                {width: 6}
                             ]
                         },
-                        { template: "asdasdasdasdasdasdasdasdasd" }
+                        {
+                            view: "datatable",
+                            localId: "grid",
+                            select: true,
+                            tooltip: true,
+                            footer: true,
+                            columns: [
+                                {
+                                    id: "id",
+                                    header: "#",
+                                    width: 40,
+                                    sort: "int",
+                                    tooltip: false,
+                                    // footer: {text: "Total:", colspan: 2}
+                                }
+                            ]
+                        }
                     ]
                 },
                 {
-                    view: "template",
-                    width: 250
+                    type: "wide",
+                    width: 250,
+                    rows: [
+                        {
+                            template: "row 1"
+                        },
+                        {
+                            template: "row 2"
+                        }
+                    ]
                 }
             ]
         }
