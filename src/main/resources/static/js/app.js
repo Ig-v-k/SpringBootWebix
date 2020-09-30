@@ -15,30 +15,30 @@ const menuSystemAdmin = [
     }
 ];
 
-const menyCompanyAdmin=[
+const menyCompanyAdmin = [
     {
         id: "logger",
         icon: "history",
         value: "User actions"
     },
     {
-        id:"user",
-        icon:"user",
-        value:"Users"
+        id: "user",
+        icon: "user",
+        value: "Users"
     },
 
 ];
 
-const menuCompanyUser=[
+const menuCompanyUser = [
     {
-        id:"dashboard",
-        icon:"home",
-        value:"Home"
+        id: "dashboard",
+        icon: "home",
+        value: "Home"
     },
     {
-        id:"vehicle",
-        icon:"car",
-        value:"Vehicles"
+        id: "vehicle",
+        icon: "car",
+        value: "Vehicles"
     },
 ];
 
@@ -62,27 +62,27 @@ const init = function () {
 
     webix.ui(panel);
     panel = $$("empty");
-    const urlQuery=window.location.search;
-    if (urlQuery && urlQuery.startsWith('?q=reg')){
-        const token=urlQuery.split('=')[2];
-        connection.sendAjax("GET","api/user/check/"+token).then(result=> {
-            const userId=result.json();
+    const urlQuery = window.location.search;
+    if (urlQuery && urlQuery.startsWith('?q=reg')) {
+        const token = urlQuery.split('=')[2];
+        connection.sendAjax("GET", "api/user/check/" + token).then(result => {
+            const userId = result.json();
             showRegistration(userId);
-        }).fail(err=> {
+        }).fail(err => {
             util.messages.showErrorMessage("Token has expired or is invalid!");
             checkState();
         });
-    }else{
+    } else {
         checkState();
     }
 
 };
 
-const checkState=function(){
-    connection.sendAjax("GET","api/user/state").then(data => {
+const checkState = function () {
+    connection.sendAjax("GET", "api/user/state").then(data => {
         userData = data.json();
         showApp();
-    }).fail(()=> {
+    }).fail(() => {
         showLogin();
     });
 };
@@ -94,11 +94,11 @@ const checkState=function(){
 // };
 
 const showRegistration = function (userId) {
-    const registration=webix.copy(registrationLayout);
-    webix.ui(registration,panel);
-    panel=$$("registration");
+    const registration = webix.copy(registrationLayout);
+    webix.ui(registration, panel);
+    panel = $$("registration");
     $$("registrationForm").setValues({
-        id:userId
+        id: userId
     });
 
 };
@@ -116,11 +116,11 @@ const showApp = function () {
 };
 
 const preloadDependencies = function () {
-    const promises=[];
-    promises.push(connection.sendAjax("GET","api/role").then(data=> {
+    const promises = [];
+    promises.push(connection.sendAjax("GET", "api/role").then(data => {
         const roles = [];
         const array = [];
-        data.json().forEach(obj=> {
+        data.json().forEach(obj => {
             roles[obj.id] = obj.value;
             array.push(obj);
         });
@@ -128,10 +128,10 @@ const preloadDependencies = function () {
         dependency["role"] = array;
 
     }));
-    promises.push(connection.sendAjax("GET","api/status").then(data=> {
+    promises.push(connection.sendAjax("GET", "api/status").then(data => {
         const status = [];
         const array = [];
-        data.json().forEach(obj=> {
+        data.json().forEach(obj => {
             status[obj.id] = obj.value;
             array.push(obj);
         });
