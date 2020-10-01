@@ -17,7 +17,7 @@ import java.util.Date;
 			columns = {
 				  @ColumnResult(name = "id", type = Integer.class),
 				  @ColumnResult(name = "status", type = String.class),
-				  @ColumnResult(name = "date", type = Date.class),
+				  @ColumnResult(name = "pay_date", type = Date.class),
 				  @ColumnResult(name = "method", type = String.class),
 				  @ColumnResult(name = "number", type = String.class),
 				  @ColumnResult(name = "type", type = Integer.class),
@@ -26,7 +26,7 @@ import java.util.Date;
 				  @ColumnResult(name = "name", type = String.class),
 				  @ColumnResult(name = "city", type = String.class),
 				  @ColumnResult(name = "country", type = String.class),
-				  @ColumnResult(name = "payment_user", type = User.class)
+				  @ColumnResult(name = "payment_user_id", type = Integer.class)
 			}
 	  )
 )
@@ -58,7 +58,7 @@ public class Payment implements Serializable {
   @Column(name = "status", length = 32, nullable = false)
   private String status;
   @Basic
-  @Column(name = "registration_date", length = 64, nullable = false)
+  @Column(name = "pay_date", length = 64, nullable = false)
   private Timestamp date;
   @Basic
   @Column(name = "method", length = 64, nullable = false)
