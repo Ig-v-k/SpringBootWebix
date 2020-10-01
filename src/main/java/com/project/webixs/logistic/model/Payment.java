@@ -25,8 +25,7 @@ import java.util.Date;
 				  @ColumnResult(name = "left_pay", type = String.class),
 				  @ColumnResult(name = "name", type = String.class),
 				  @ColumnResult(name = "city", type = String.class),
-				  @ColumnResult(name = "country", type = String.class),
-				  @ColumnResult(name = "payment_user_id", type = Integer.class)
+				  @ColumnResult(name = "country", type = String.class)
 			}
 	  )
 )

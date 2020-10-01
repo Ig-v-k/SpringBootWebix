@@ -35,13 +35,6 @@ public class UserController extends AbstractController<User,Integer> {
 	throw new ForbiddenException("Forbidden");
   }
 
-  @RequestMapping("/{companyId}/{roleId}")
-  public List<User> getByCompanyIdAndRoleId(@PathVariable Integer companyId, @PathVariable Integer roleId) throws ForbiddenException{
-	if (!userBean.getUser().getRoleId().equals(roleSystemAdmin) && roleId.equals(roleSystemAdmin))
-	  throw new ForbiddenException("Forbidden");
-	return repository.getAllByCompanyIdAndRoleId(companyId.equals(0) ? null : companyId, roleId);
-  }
-
   @RequestMapping(value = {"/state"})
   public User checkState() throws ForbiddenException {
 	if (userBean.getLoggedIn())

@@ -12,28 +12,41 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-@SqlResultSetMapping(
-	  name = "UserMapping",
-	  classes = @ConstructorResult(
-			targetClass = User.class,
-			columns = {
-				  @ColumnResult(name = "id", type = Integer.class),
-				  @ColumnResult(name = "username", type = String.class),
-				  @ColumnResult(name = "password", type = String.class),
-				  @ColumnResult(name = "first_name", type = String.class),
-				  @ColumnResult(name = "last_name", type = String.class),
-				  @ColumnResult(name = "registration_date", type = Date.class),
-				  @ColumnResult(name = "email", type = String.class),
-				  @ColumnResult(name = "token", type = String.class),
-				  @ColumnResult(name = "role_id", type = Integer.class),
-				  @ColumnResult(name = "status_id", type = Integer.class),
-				  @ColumnResult(name = "company_id", type = Integer.class),
-				  @ColumnResult(name = "notification_type_id", type = Integer.class),
-				  @ColumnResult(name = "location_id", type = Integer.class),
-				  @ColumnResult(name = "usr_payments", type = Payment.class)
-			}
+
+@SqlResultSetMappings({
+	  @SqlResultSetMapping(
+			name = "UserMapping",
+			classes = @ConstructorResult(
+				  targetClass = User.class,
+				  columns = {
+						@ColumnResult(name = "id", type = Integer.class),
+						@ColumnResult(name = "username", type = String.class),
+						@ColumnResult(name = "password", type = String.class),
+						@ColumnResult(name = "first_name", type = String.class),
+						@ColumnResult(name = "last_name", type = String.class),
+						@ColumnResult(name = "registration_date", type = Date.class),
+						@ColumnResult(name = "email", type = String.class),
+						@ColumnResult(name = "token", type = String.class),
+						@ColumnResult(name = "role_id", type = Integer.class),
+						@ColumnResult(name = "status_id", type = Integer.class),
+						@ColumnResult(name = "company_id", type = Integer.class),
+						@ColumnResult(name = "notification_type_id", type = Integer.class),
+						@ColumnResult(name = "location_id", type = Integer.class)
+				  }
+			)
+	  ),
+	  @SqlResultSetMapping(
+			name = "UserMappingTest",
+			classes = @ConstructorResult(
+				  targetClass = User.class,
+				  columns = {
+						@ColumnResult(name = "username", type = String.class),
+						@ColumnResult(name = "first_name", type = String.class),
+						@ColumnResult(name = "last_name", type = String.class),
+				  }
+			)
 	  )
-)
+})
 @Data
 @Entity
 @NoArgsConstructor
@@ -89,12 +102,10 @@ public class User implements Serializable {
   @Basic
   @Column(name = "company_id")
   private Integer companyId;
-
   @Basic
   @JsonIgnore
   @Column(name = "token", length = 64)
   private String token;
-
   @Basic
   @Column(name = "notification_type_id", nullable = false)
   private Integer notificationTypeId;
