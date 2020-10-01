@@ -19,6 +19,7 @@ class UserRepositoryTest {
 
   @Test
   @Transactional
+  @DisplayName("Test1")
   public void getAUserFromDatabaseById() {
     assertNull(repository.getOneById(1));
   }
@@ -26,7 +27,14 @@ class UserRepositoryTest {
   @Test
   @Transactional
   @DisplayName("Test2")
-  public void getAUserFromDatabaseByIdAndShowHe() {
-    System.out.println("\nTest2: -----> " + repository.getOneById(1) + "\n");
+  public void getAUserFromDatabaseByIdAndShowHim() {
+    System.out.println("\nTest2: -----> " + repository.getOneById(0) + "\n");
+  }
+
+  @Test
+  @Transactional
+  @DisplayName("Test3")
+  public void getAUserFromDatabaseByIdAndShowHimFromLogin() {
+    System.out.println("\nTest3: -----> " + repository.login("admin", "admin") + "\n");
   }
 }

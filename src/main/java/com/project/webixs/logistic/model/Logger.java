@@ -37,7 +37,7 @@ public class Logger {
   private Timestamp created;
 
   @Basic
-  @Column(name = "atomic", nullable = false)
+  @Column(name = "atomic", columnDefinition = "BIT", nullable = false)
   private Byte atomic;
 
   @Basic
