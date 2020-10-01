@@ -10,6 +10,9 @@ var userStatus = {
     inactive: 3
 };
 
+var formatDate = webix.Date.dateToStr("%j %F, %H:%i");
+var stringDate = formatDate(new Date());
+
 var successMessage = "Success";
 
 var dependencyMap = [];
