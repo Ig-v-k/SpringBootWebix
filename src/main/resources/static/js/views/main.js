@@ -397,7 +397,7 @@ const mainLayout = {
                                     id: "", header: "Payment", fillspace: 3, minWidth: 240, sort: "text",
                                     tooltip: "The card with which the payment was made",
                                     template: data => {
-                                        return `<img class="method" src="data/images/${data.method}.svg" />${data.method} ${data.number || ""}`;
+                                        return `<img class="method" src="../../img/${data.method}.svg" />${data.method} ${data.numb er || ""}`;
                                     }
                                 },
                                 {

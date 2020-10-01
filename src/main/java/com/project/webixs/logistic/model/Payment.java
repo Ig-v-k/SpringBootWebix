@@ -1,0 +1,115 @@
+package com.project.webixs.logistic.model;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Date;
+
+@SqlResultSetMapping(
+	  name = "PaymentMapping",
+	  classes = @ConstructorResult(
+			targetClass = Payment.class,
+			columns = {
+				  @ColumnResult(name = "id", type = Integer.class),
+				  @ColumnResult(name = "status", type = String.class),
+				  @ColumnResult(name = "date", type = Date.class),
+				  @ColumnResult(name = "method", type = String.class),
+				  @ColumnResult(name = "number", type = String.class),
+				  @ColumnResult(name = "type", type = Integer.class),
+				  @ColumnResult(name = "sum", type = String.class),
+				  @ColumnResult(name = "left_pay", type = String.class),
+				  @ColumnResult(name = "name", type = String.class),
+				  @ColumnResult(name = "city", type = String.class),
+				  @ColumnResult(name = "country", type = String.class),
+				  @ColumnResult(name = "payment_user", type = User.class)
+			}
+	  )
+)
+@Data
+@Entity
+@NoArgsConstructor
+@Table(name = "payment")
+@EqualsAndHashCode(of = {"id"})
+@ToString(of = {
+	  "id",
+	  "status",
+	  "date",
+	  "method",
+	  "number",
+	  "type",
+	  "sum",
+	  "leftPay",
+	  "name",
+	  "city",
+	  "country",
+	  "paymentUser"
+})
+public class Payment implements Serializable {
+  @Id
+  @Column(name = "id", nullable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
+  @Basic
+  @Column(name = "status", length = 32, nullable = false)
+  private String status;
+  @Basic
+  @Column(name = "registration_date", length = 64, nullable = false)
+  private Timestamp date;
+  @Basic
+  @Column(name = "method", length = 64, nullable = false)
+  private String method;
+  @Basic
+  @Column(name = "number", length = 64, nullable = false)
+  private String number;
+  @Basic
+  @Column(name = "type", nullable = false)
+  private Integer type;
+  @Basic
+  @Column(name = "sum", length = 64, nullable = false)
+  private String sum;
+  @Basic
+  @Column(name = "left_pay", length = 64, nullable = false)
+  private String leftPay;
+  @Basic
+  @Column(name = "name", length = 64, nullable = false)
+  private String name;
+  @Basic
+  @Column(name = "city", length = 64, nullable = false)
+  private String city;
+  @Basic
+  @Column(name = "country", length = 64, nullable = false)
+  private String country;
+  @ManyToOne
+  private User paymentUser;
+
+  public Payment(final Integer id,
+				 final String status,
+				 final Date date,
+				 final String method,
+				 final String number,
+				 final Integer type,
+				 final String sum,
+				 final String leftPay,
+				 final String name,
+				 final String city,
+				 final String country,
+				 final User paymentUser) {
+	this.id = id;
+	this.status = status;
+	this.date = date == null ? null : new Timestamp(date.getTime());
+	this.method = method;
+	this.number = number;
+	this.type = type;
+	this.sum = sum;
+	this.leftPay = leftPay;
+	this.name = name;
+	this.city = city;
+	this.country = country;
+	this.paymentUser = paymentUser;
+  }
+}
