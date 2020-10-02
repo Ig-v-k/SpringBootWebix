@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("api/logger")
 public class LoggerController extends ReadOnlyController<Logger, Integer> {
 
-  private LoggerRepository repository;
+  private final LoggerRepository repository;
 
   @Value(value = "${role.system_admin}")
   private Integer roleSystemAdmin;

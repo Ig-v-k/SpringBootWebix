@@ -51,7 +51,7 @@ create table usr
     email                varchar(64) not null,
     first_name           varchar(64),
     last_name            varchar(64),
-    token                varchar(64),
+--     token                varchar(64),
     location_id          int4,
     notification_type_id int4        not null,
     password             varchar(128),

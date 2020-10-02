@@ -5,6 +5,6 @@ import com.project.webixs.logistic.repository.repositoryCustom.LoggerRepositoryC
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
-@NoRepositoryBean
+//@NoRepositoryBean
 public interface LoggerRepository extends JpaRepository<Logger,Integer>, LoggerRepositoryCustom {
 }

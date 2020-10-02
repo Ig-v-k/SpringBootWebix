@@ -26,7 +26,7 @@ import java.util.List;
 						@ColumnResult(name = "last_name", type = String.class),
 						@ColumnResult(name = "registration_date", type = Date.class),
 						@ColumnResult(name = "email", type = String.class),
-						@ColumnResult(name = "token", type = String.class),
+//						@ColumnResult(name = "token", type = String.class),
 						@ColumnResult(name = "role_id", type = Integer.class),
 						@ColumnResult(name = "status_id", type = Integer.class),
 						@ColumnResult(name = "company_id", type = Integer.class),
@@ -57,7 +57,7 @@ import java.util.List;
 	  "username",
 	  "password",
 	  "firstName",
-	  "token",
+//	  "token",
 	  "lastName",
 	  "registrationDate",
 	  "email",
@@ -102,10 +102,10 @@ public class User implements Serializable {
   @Basic
   @Column(name = "company_id")
   private Integer companyId;
-  @Basic
-  @JsonIgnore
-  @Column(name = "token", length = 64)
-  private String token;
+//  @Basic
+//  @JsonIgnore
+//  @Column(name = "token", length = 64)
+//  private String token;
   @Basic
   @Column(name = "notification_type_id", nullable = false)
   private Integer notificationTypeId;
@@ -126,8 +126,7 @@ public class User implements Serializable {
 			  Integer statusId,
 			  Integer companyId,
 			  Integer notificationTypeId,
-			  Integer locationId,
-			  List<Payment> userPayments) {
+			  Integer locationId) {
 	this.id = id;
 	this.username = username;
 	this.password = password;
@@ -140,6 +139,5 @@ public class User implements Serializable {
 	this.companyId = companyId;
 	this.notificationTypeId = notificationTypeId;
 	this.locationId = locationId;
-	this.userPayments = userPayments;
   }
 }
