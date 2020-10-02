@@ -138,6 +138,16 @@ const preloadDependencies = function () {
         dependencyMap["status"] = status;
         dependency["status"] = array;
     }));
+    promises.push(connection.sendAjax("GET", "api/payment").then(data => {
+        const payments = [];
+        const array = [];
+        data.json().forEach(obj => {
+            payments[obj.id] = obj.value;
+            array.push(obj);
+        });
+        dependencyMap["payment"] = payments;
+        dependency["payment"] = array;
+    }))
     return webix.promise.all(promises);
 };
 

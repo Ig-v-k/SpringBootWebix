@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ReadOnlyController<T, ID extends Serializable> extends CommonController {
 
-  private JpaRepository<T, ID> repo;
+  private final JpaRepository<T, ID> repo;
 
   public ReadOnlyController(JpaRepository<T, ID> repo) {
 	this.repo = repo;
