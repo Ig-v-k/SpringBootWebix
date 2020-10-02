@@ -362,6 +362,9 @@ const mainLayout = {
                             select: true,
                             tooltip: true,
                             footer: true,
+                            data: webix.ajax("api/payment").then(function(data){
+                                data.json();
+                            }),
                             columns: [
                                 {
                                     id: "id",

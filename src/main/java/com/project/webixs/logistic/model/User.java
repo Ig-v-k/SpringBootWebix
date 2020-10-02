@@ -112,7 +112,7 @@ public class User implements Serializable {
   @Basic
   @Column(name = "location_id")
   private Integer locationId;
-  @OneToMany(mappedBy = "paymentUser")
+  @OneToMany(mappedBy = "paymentUser", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private List<Payment> userPayments;
 
   public User(Integer id,
