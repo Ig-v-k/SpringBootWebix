@@ -1,10 +1,14 @@
 package com.project.webixs.logistic.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -52,38 +56,51 @@ public class Payment implements Serializable {
   @Id
   @Column(name = "id", nullable = false)
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @JsonProperty("#id")
   private Integer id;
   @Basic
   @Column(name = "status", length = 32, nullable = false)
+  @JsonProperty("#status")
   private String status;
   @Basic
   @Column(name = "pay_date", length = 64, nullable = false)
+  @JsonProperty("#pay_date")
   private Timestamp date;
   @Basic
   @Column(name = "method", length = 64, nullable = false)
+  @JsonProperty("#method")
   private String method;
   @Basic
   @Column(name = "number", length = 64, nullable = false)
+  @JsonProperty("#number")
   private String number;
   @Basic
   @Column(name = "type", nullable = false)
+  @JsonProperty("#type")
   private Integer type;
   @Basic
   @Column(name = "sum", length = 64, nullable = false)
+  @JsonProperty("#sum")
   private String sum;
   @Basic
   @Column(name = "left_pay", length = 64, nullable = false)
+  @JsonProperty("#leftPay")
   private String leftPay;
   @Basic
   @Column(name = "name", length = 64, nullable = false)
+  @JsonProperty("#name")
   private String name;
   @Basic
   @Column(name = "city", length = 64, nullable = false)
+  @JsonProperty("#city")
   private String city;
   @Basic
   @Column(name = "country", length = 64, nullable = false)
+  @JsonProperty("#country")
   private String country;
   @ManyToOne
+  @JsonProperty("#paymentUser")
+  @JsonManagedReference
   private User paymentUser;
 
   public Payment(final Integer id,

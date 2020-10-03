@@ -1,11 +1,13 @@
 package com.project.webixs.logistic.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -102,7 +104,7 @@ public class User implements Serializable {
   @Basic
   @Column(name = "company_id")
   private Integer companyId;
-//  @Basic
+  //  @Basic
 //  @JsonIgnore
 //  @Column(name = "token", length = 64)
 //  private String token;
@@ -112,7 +114,9 @@ public class User implements Serializable {
   @Basic
   @Column(name = "location_id")
   private Integer locationId;
+//  @JsonIgnore
   @OneToMany(mappedBy = "paymentUser", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @JsonBackReference
   private List<Payment> userPayments;
 
   public User(Integer id,

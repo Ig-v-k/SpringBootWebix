@@ -362,9 +362,22 @@ const mainLayout = {
                             select: true,
                             tooltip: true,
                             footer: true,
-                            data: webix.ajax("api/payment").then(function(data){
-                                data.json();
-                            }),
+                            // data: [
+                            //     {
+                            //         "id":1,
+                            //         "status":"success",
+                            //         "date":"2018-09-24 04:36",
+                            //         "method":"PayPal",
+                            //         "number":"do***@yahoo.com",
+                            //         "type":0,
+                            //         "sum":"105.15",
+                            //         "left":"847.71",
+                            //         "name":"The Smoking Jug",
+                            //         "city":"Tirane",
+                            //         "country":"AL"
+                            //     }
+                            // ],
+                            url: "api/payment",
                             columns: [
                                 {
                                     id: "id",
@@ -482,8 +495,6 @@ const registrationLayout = {
                     borderless: true,
                     height: 500,
                     width: 500,
-                    template: '<img  src="../../img/telegroup-logo.png"/>' +
-                        '<img  src="../../img/app-logo.png"/>'
                 },
                 {
                     rows: [
