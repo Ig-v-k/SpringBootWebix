@@ -8,6 +8,7 @@ import com.project.webixs.logistic.repository.UserRepository;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/user")
 @Scope("request")
-public class UserController extends AbstractController<User,Integer> {
+public class UserController extends AbstractController<User, Integer> {
 
   private final UserRepository repository;
 
@@ -27,7 +28,7 @@ public class UserController extends AbstractController<User,Integer> {
 
   public UserController(UserRepository repo) {
 	super(repo);
-	repository=repo;
+	repository = repo;
   }
 
   @Override
@@ -50,10 +51,13 @@ public class UserController extends AbstractController<User,Integer> {
 	return "Success";
   }
 
-  @RequestMapping(value = "/login", method = RequestMethod.POST)
+  @RequestMapping(
+		value = "/login",
+		method = RequestMethod.POST,
+		produces = MediaType.APPLICATION_JSON_VALUE)
   public User login(@RequestBody LoginInfo userInformation) throws ForbiddenException {
 	User user = repository.login(userInformation.getUsername(), userInformation.getPassword());
-	if (null != user){
+	if (null != user) {
 	  userBean.setLoggedIn(true);
 	  userBean.setUser(user);
 	  return user;

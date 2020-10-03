@@ -56,50 +56,50 @@ public class Payment implements Serializable {
   @Id
   @Column(name = "id", nullable = false)
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @JsonProperty("#id")
+  @JsonProperty("id")
   private Integer id;
   @Basic
   @Column(name = "status", length = 32, nullable = false)
-  @JsonProperty("#status")
+  @JsonProperty("status")
   private String status;
   @Basic
   @Column(name = "pay_date", length = 64, nullable = false)
-  @JsonProperty("#pay_date")
+  @JsonProperty("pay_date")
   private Timestamp date;
   @Basic
   @Column(name = "method", length = 64, nullable = false)
-  @JsonProperty("#method")
+  @JsonProperty("method")
   private String method;
   @Basic
   @Column(name = "number", length = 64, nullable = false)
-  @JsonProperty("#number")
+  @JsonProperty("_number")
   private String number;
   @Basic
   @Column(name = "type", nullable = false)
-  @JsonProperty("#type")
+  @JsonProperty("type")
   private Integer type;
   @Basic
   @Column(name = "sum", length = 64, nullable = false)
-  @JsonProperty("#sum")
+  @JsonProperty("sum")
   private String sum;
   @Basic
   @Column(name = "left_pay", length = 64, nullable = false)
-  @JsonProperty("#leftPay")
+  @JsonProperty("leftPay")
   private String leftPay;
   @Basic
   @Column(name = "name", length = 64, nullable = false)
-  @JsonProperty("#name")
+  @JsonProperty("name")
   private String name;
   @Basic
   @Column(name = "city", length = 64, nullable = false)
-  @JsonProperty("#city")
+  @JsonProperty("city")
   private String city;
   @Basic
   @Column(name = "country", length = 64, nullable = false)
-  @JsonProperty("#country")
+  @JsonProperty("country")
   private String country;
   @ManyToOne
-  @JsonProperty("#paymentUser")
+  @JsonProperty("paymentUser")
   @JsonManagedReference
   private User paymentUser;
 
