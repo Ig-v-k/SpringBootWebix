@@ -407,7 +407,7 @@ const mainLayout = {
                                 {
                                     id: "date", header: "Date",
                                     fillspace: 2, minWidth: 150,
-                                    sort: "date", format: stringDate
+                                    sort: "date", format: function(value){ return webix.i18n.date(value)}
                                 },
                                 {
                                     id: "", header: "Payment", fillspace: 3, minWidth: 240, sort: "text",
