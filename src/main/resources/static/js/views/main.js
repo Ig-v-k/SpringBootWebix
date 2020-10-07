@@ -378,6 +378,11 @@ const mainLayout = {
                             //     }
                             // ],
                             url: "api/payment",
+                            // scheme: {
+                            //     $init:function(obj) {
+                            //         obj.startdate =
+                            //     }
+                            // },
                             columns: [
                                 {
                                     id: "id",
@@ -407,7 +412,9 @@ const mainLayout = {
                                 {
                                     id: "date", header: "Date",
                                     fillspace: 2, minWidth: 150,
-                                    sort: "date", format: function(value){ return webix.i18n.date(value)}
+                                    sort: "date", format: data => {
+                                        return `webix.Date.dateToStr(${data.pay_date})`;
+                                    }
                                 },
                                 {
                                     id: "", header: "Payment", fillspace: 3, minWidth: 240, sort: "text",
