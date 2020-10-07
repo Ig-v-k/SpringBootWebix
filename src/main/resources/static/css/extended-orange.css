@@ -1,4 +1,82 @@
+/* toolbar */
+.toolbar_button button{
+    padding:0;
+    text-align:center;
+}
+.logo{
+    background: 2px 2px no-repeat;
+}
 
+/* list of persons */
+.userphoto{
+    display:inline-block;
+    border-radius:25px;
+    width:48px;
+    height:48px;
+    float:left;
+}
+.text {
+    padding:4px 4px 4px 16px;
+    display:inline-block;
+}
+.username{
+    font-size:14px;
+    letter-spacing:0.2px;
+    color:#313131;
+    font-weight:500;
+    line-height:20px;
+    display:block;
+    max-width:150px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.money{
+    color:#475466;
+    display:block;
+    letter-spacing:0.2px;
+    line-height:20px;
+}
+
+/* transactions grid */
+.success, .waiting, .failed, .incoming, .payment{
+    font-size: 20px;
+    margin-top: 8px;
+}
+.success{
+    color:#55CD97;
+}
+.waiting{
+    color:orange;
+}
+.failed, .danger{
+    color:#FF5C4C;
+}
+.incoming{
+    color:#41ad7c;
+}
+.payment{
+    color:#FF5C4C;
+}
+.method{
+    margin-bottom:-8px;
+    margin-right:8px;
+}
+
+/* notifications */
+.notifications .webix_list_item,
+.notifications .webix_list_item.webix_selected{
+    line-height:20px;
+    padding:10px;
+}
+.notifications .webix_list_item .m_title{
+    font-weight:500;
+    color:#313131;
+}
+.notifications .webix_list_item .message{
+    display:block;
+    color:#475466;
+}
 /*.app_button button{*/
 /*    padding:0;*/
 /*    text-align: center;*/

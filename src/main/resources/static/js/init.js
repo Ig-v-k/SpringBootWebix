@@ -32,7 +32,7 @@ var cssToLoad = [
     // "https://cdn.webix.com/edge/webix.js",
     "https://cdn.materialdesignicons.com/2.7.94/css/materialdesignicons.css?v=7.4.6",
     // "webix/codebase/webix-orange.css",
-    // "css/extended-orange.css",
+    "css/extended-orange.css",
     // "webix/extensions/sidebar/sidebar-orange.css",
     // "webix/codebase/dhtmlxscheduler_material.css"
 ];
