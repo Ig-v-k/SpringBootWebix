@@ -1,5 +1,6 @@
 package com.project.webixs.logistic.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -65,6 +66,7 @@ public class Payment implements Serializable {
   @Basic
   @Column(name = "pay_date", length = 64, nullable = false)
   @JsonProperty("pay_date")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd MMMM, HH:mm", locale = "en")
   private Timestamp date;
   @Basic
   @Column(name = "method", length = 64, nullable = false)

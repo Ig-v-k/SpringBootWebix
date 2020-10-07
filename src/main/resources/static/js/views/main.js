@@ -378,11 +378,27 @@ const mainLayout = {
                             //     }
                             // ],
                             url: "api/payment",
+                            // save: "rest -> //localhost:8080/api/payment",
+                            // url: function (params) {
+                            //     var obj = webix.ajax("api/payment");
+                            //     var my_format = webix.Date.strToDate("%Y-%m-%d");
+                            //     obj.pay_date = my_format(obj.pay_date)
+                            //     return obj;
+                            // },
                             // scheme: {
                             //     $init:function(obj) {
-                            //         obj.startdate =
+                            //         var my_format = webix.Date.strToDate("%Y-%m-%d");
+                            //         obj.pay_date = my_format(obj.pay_date)
                             //     }
-                            // },
+                            // }
+                            on:{
+                                onAfterLoad:function(){
+                                    if (!this.count())
+                                        this.showOverlay("Sorry, there is no data");
+                                    else
+                                        this.hideOverlay();
+                                }
+                            },
                             columns: [
                                 {
                                     id: "id",
@@ -412,9 +428,16 @@ const mainLayout = {
                                 {
                                     id: "date", header: "Date",
                                     fillspace: 2, minWidth: 150,
-                                    sort: "date", format: data => {
-                                        return `webix.Date.dateToStr(${data.pay_date})`;
+                                    sort: "date",
+                                    // template: data => {
+                                    //     const my_format = webix.Date.strToDate(new Date());
+                                    //     data.pay_date = my_format(data.pay_date)
+                                    //     return `${data.pay_date}`
+                                    // }
+                                    template: data => {
+                                        return `${data.pay_date}`
                                     }
+                                    // format: dateFormat
                                 },
                                 {
                                     id: "", header: "Payment", fillspace: 3, minWidth: 240, sort: "text",
