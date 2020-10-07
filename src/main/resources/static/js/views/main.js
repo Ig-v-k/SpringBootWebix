@@ -363,15 +363,18 @@ const mainLayout = {
                             select: true,
                             tooltip: true,
                             footer: true,
-                            save: "rest->api/payment",
+                            save: {
+                                url: "rest->api/payment",
+                                autoupdate: true
+                            },
                             url: "rest->api/payment",
                             scheme: {
-                                $init:function(grid) {
+                                $init: function (grid) {
 
                                 }
                             },
-                            on:{
-                                onAfterLoad:function(){
+                            on: {
+                                onAfterLoad: function () {
                                     if (!this.count())
                                         this.showOverlay("Sorry, there is no data");
                                     else
