@@ -262,7 +262,7 @@ var menu_data_multi = [
 
 const mainLayout = {
     id: "app",
-    type: "space",
+    // type: "space",
     rows: [
         {
             view: "toolbar",
@@ -325,6 +325,7 @@ const mainLayout = {
                 {
                     view: "sidebar",
                     data: menu_data,
+                    width: 190,
                     on: {
                         onAfterSelect: function (id) {
                             webix.message("Selected: " + this.getItem(id).value);
@@ -370,7 +371,9 @@ const mainLayout = {
                             url: "rest->api/payment",
                             scheme: {
                                 $init: function (grid) {
-
+                                    this.data.sync(grid,function(){
+                                        this.filter(obj => obj.id <= 50);
+                                    });
                                 }
                             },
                             on: {
@@ -411,15 +414,9 @@ const mainLayout = {
                                     id: "date", header: "Date",
                                     fillspace: 2, minWidth: 150,
                                     sort: "date",
-                                    // template: data => {
-                                    //     const my_format = webix.Date.strToDate(new Date());
-                                    //     data.pay_date = my_format(data.pay_date)
-                                    //     return `${data.pay_date}`
-                                    // }
                                     template: data => {
                                         return `${data.pay_date}`
                                     }
-                                    // format: dateFormat
                                 },
                                 {
                                     id: "", header: "Payment", fillspace: 3, minWidth: 240, sort: "text",
