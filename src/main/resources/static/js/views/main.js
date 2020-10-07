@@ -359,6 +359,7 @@ const mainLayout = {
                         {
                             view: "datatable",
                             localId: "grid",
+                            id: "datview",
                             select: true,
                             tooltip: true,
                             footer: true,
@@ -377,20 +378,23 @@ const mainLayout = {
                             //         "country":"AL"
                             //     }
                             // ],
-                            url: "api/payment",
-                            // save: "rest -> //localhost:8080/api/payment",
+                            save: "rest->api/payment",
+                            url: "rest->api/payment",
                             // url: function (params) {
                             //     var obj = webix.ajax("api/payment");
                             //     var my_format = webix.Date.strToDate("%Y-%m-%d");
                             //     obj.pay_date = my_format(obj.pay_date)
                             //     return obj;
                             // },
-                            // scheme: {
-                            //     $init:function(obj) {
-                            //         var my_format = webix.Date.strToDate("%Y-%m-%d");
-                            //         obj.pay_date = my_format(obj.pay_date)
-                            //     }
-                            // }
+                            scheme: {
+                                $init:function(grid) {
+                                    // var rest = webix.proxy("rest", "api/payment");
+
+                                    // grid.data.sync("api/payment", function() {
+                                    //     this.filter(function(obj => obj.id <= list_length))
+                                    // })
+                                }
+                            },
                             on:{
                                 onAfterLoad:function(){
                                     if (!this.count())
