@@ -363,36 +363,11 @@ const mainLayout = {
                             select: true,
                             tooltip: true,
                             footer: true,
-                            // data: [
-                            //     {
-                            //         "id":1,
-                            //         "status":"success",
-                            //         "date":"2018-09-24 04:36",
-                            //         "method":"PayPal",
-                            //         "number":"do***@yahoo.com",
-                            //         "type":0,
-                            //         "sum":"105.15",
-                            //         "left":"847.71",
-                            //         "name":"The Smoking Jug",
-                            //         "city":"Tirane",
-                            //         "country":"AL"
-                            //     }
-                            // ],
                             save: "rest->api/payment",
                             url: "rest->api/payment",
-                            // url: function (params) {
-                            //     var obj = webix.ajax("api/payment");
-                            //     var my_format = webix.Date.strToDate("%Y-%m-%d");
-                            //     obj.pay_date = my_format(obj.pay_date)
-                            //     return obj;
-                            // },
                             scheme: {
                                 $init:function(grid) {
-                                    // var rest = webix.proxy("rest", "api/payment");
 
-                                    // grid.data.sync("api/payment", function() {
-                                    //     this.filter(function(obj => obj.id <= list_length))
-                                    // })
                                 }
                             },
                             on:{
