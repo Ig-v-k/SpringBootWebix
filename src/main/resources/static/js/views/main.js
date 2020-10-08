@@ -42,224 +42,6 @@ var menu_data = [
     // {id: "demo", icon: "mdi mdi-book", value: "Documentation"}
 ];
 
-var menu_data_multi = [
-    {
-        id: "structure",
-        icon: "mdi mdi-view-column",
-        value: "Structuring",
-        data: [
-            {
-                id: "layouts",
-                icon: "mdi mdi-circle",
-                value: "Layouts",
-                data: [
-                    {
-                        id: "layout",
-                        icon: "mdi mdi-circle-outline",
-                        value: "Layout"
-                    },
-                    {
-                        id: "flexlayout",
-                        icon: "mdi mdi-circle-outline",
-                        value: "Flex Layout"
-                    },
-                    {
-                        id: "strict",
-                        icon: "mdi mdi-circle-outline",
-                        value: "Precise Positioning",
-                        data: [
-                            {
-                                id: "gridlayout",
-                                icon: "mdi mdi-circle-outline",
-                                value: "Grid Layout"
-                            },
-                            {
-                                id: "dashboard",
-                                icon: "mdi mdi-circle-outline",
-                                value: "Dashboard"
-                            },
-                            {
-                                id: "abslayout",
-                                icon: "mdi mdi-circle-outline",
-                                value: "Abs Layout"
-                            }
-                        ]
-                    },
-                    {
-                        id: "datalayouts",
-                        icon: "mdi mdi-circle-outline",
-                        value: "Data Layouts",
-                        data: [
-                            {
-                                id: "datalayout",
-                                icon: "mdi mdi-circle-outline",
-                                value: "Data Layout"
-                            },
-                            {
-                                id: "flexdatalayout",
-                                icon: "mdi mdi-circle-outline",
-                                value: "Flex Data Layout"
-                            },
-                        ]
-                    }
-                ]
-            },
-            {
-                id: "multiviews",
-                icon: "mdi mdi-circle",
-                value: "Multiviews",
-                data: [
-                    {
-                        id: "multiview",
-                        icon: "mdi mdi-circle-outline",
-                        value: "MultiView"
-                    },
-                    {
-                        id: "tabview",
-                        icon: "mdi mdi-circle-outline",
-                        value: "TabView"
-                    },
-                    {
-                        id: "accordion",
-                        icon: "mdi mdi-circle-outline",
-                        value: "Accordion"
-                    },
-                    {
-                        id: "carousel",
-                        icon: "mdi mdi-circle-outline",
-                        value: "Carousel"
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        id: "tools",
-        icon: "mdi mdi-calendar",
-        value: "Tools",
-        data: [
-            {
-                id: "kanban",
-                icon: "mdi mdi-circle",
-                value: "Kanban Board"
-            },
-            {
-                id: "pivot",
-                icon: "mdi mdi-circle",
-                value: "Pivot Chart"
-            },
-            {
-                id: "scheduler",
-                icon: "mdi mdi-circle",
-                value: "Calendar"
-            }
-        ]
-    },
-    {
-        id: "forms",
-        icon: "mdi mdi-pencil",
-        value: "Forms",
-        data: [
-            {
-                id: "buttons",
-                icon: "mdi mdi-circle",
-                value: "Buttons",
-                data: [
-                    {
-                        id: "button",
-                        icon: "mdi mdi-circle-outline",
-                        value: "Buttons"
-                    },
-                    {
-                        id: "segmented",
-                        icon: "mdi mdi-circle-outline",
-                        value: "Segmented"
-                    },
-                    {
-                        id: "toggle",
-                        icon: "mdi mdi-circle-outline",
-                        value: "Toggle"
-                    },
-                ]
-            },
-            {
-                id: "texts",
-                icon: "mdi mdi-circle",
-                value: "Text Fields",
-                data: [
-                    {
-                        id: "text",
-                        icon: "mdi mdi-circle-outline",
-                        value: "Text"
-                    },
-                    {
-                        id: "textarea",
-                        icon: "mdi mdi-circle-outline",
-                        value: "Textarea"
-                    },
-                    {
-                        id: "richtext",
-                        icon: "mdi mdi-circle-outline",
-                        value: "RichText"
-                    }
-                ]
-            },
-            {
-                id: "selects",
-                icon: "mdi mdi-circle",
-                value: "Selectors",
-                data: [
-                    {
-                        id: "single",
-
-                        icon: "mdi mdi-circle-outline",
-                        value: "Single value",
-                        data: [
-                            {
-                                id: "combo",
-                                icon: "mdi mdi-circle-outline",
-                                value: "Combo"
-                            },
-                            {
-                                id: "richselect",
-                                icon: "mdi mdi-circle-outline",
-                                value: "RichSelect"
-                            },
-                            {
-                                id: "select",
-                                icon: "mdi mdi-circle-outline",
-                                value: "Select"
-                            }
-                        ]
-                    },
-                    {
-                        id: "multi",
-                        icon: "mdi mdi-circle-outline",
-                        value: "Multiple values",
-                        data: [
-                            {
-                                id: "multicombo",
-                                icon: "mdi mdi-circle-outline",
-                                value: "MultiCombo"
-                            },
-                            {
-                                id: "multiselect",
-                                icon: "mdi mdi-circle-outline",
-                                value: "MultiSelect"
-                            }
-                        ]
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        id: "demo",
-        icon: "mdi mdi-book",
-        value: "Documentation"
-    }
-];
-
 const mainLayout = {
     id: "app",
     // type: "space",
@@ -269,15 +51,18 @@ const mainLayout = {
             padding: 3,
             elements: [
                 {
+                    id: "asd",
                     view: "button",
                     type: "icon",
                     icon: "mdi mdi-menu",
                     width: 37,
                     align: "left",
                     css: "app_button",
+                    collapsed:true,
                     click: function () {
                         $$("$sidebar1").toggle();
-                    }
+                    },
+                    tooltip:"Click to collapse / expand the sidebar"
                 },
                 {
                     view: "label",
@@ -333,6 +118,7 @@ const mainLayout = {
                     }
                 },
                 {
+                    paddingY: 10,
                     rows: [
                         {
                             view: "toolbar",
@@ -358,9 +144,9 @@ const mainLayout = {
                             ]
                         },
                         {
+                            id: "datview",
                             view: "datatable",
                             localId: "grid",
-                            id: "datview",
                             select: true,
                             tooltip: true,
                             footer: true,
@@ -370,10 +156,8 @@ const mainLayout = {
                             },
                             url: "rest->api/payment",
                             scheme: {
-                                $init: function (grid) {
-                                    this.data.sync(grid,function(){
-                                        this.filter(obj => obj.id <= 50);
-                                    });
+                                $init: function (obj) {
+
                                 }
                             },
                             on: {
@@ -411,12 +195,9 @@ const mainLayout = {
                                     }
                                 },
                                 {
-                                    id: "date", header: "Date",
+                                    id: "pay_date", header: "Date",
                                     fillspace: 2, minWidth: 150,
-                                    sort: "date",
-                                    template: data => {
-                                        return `${data.pay_date}`
-                                    }
+                                    sort: "date"
                                 },
                                 {
                                     id: "", header: "Payment", fillspace: 3, minWidth: 240, sort: "text",
@@ -457,7 +238,7 @@ const mainLayout = {
                                     }
                                 },
                                 {
-                                    id: "left", header: "Left",
+                                    id: "leftPay", header: "Left",
                                     fillspace: 1, minWidth: 70,
                                     sort: "int", format: webix.i18n.priceFormat,
                                     footer: {
@@ -473,6 +254,7 @@ const mainLayout = {
                     ]
                 },
                 {
+                    paddingY: 10,
                     type: "wide",
                     width: 250,
                     rows: [

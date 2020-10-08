@@ -25,7 +25,7 @@ public class ReadOnlyController<T, ID extends Serializable> extends CommonContro
   }
 
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-  public T findById(@PathVariable("id") ID id) throws ForbiddenException {
+  public T findById(@PathVariable("id") ID id) {
 	return repo.findById(id).orElse(null);
   }
 }
