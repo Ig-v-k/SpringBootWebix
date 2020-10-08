@@ -137,7 +137,7 @@ const mainLayout = {
                                         {id: "1", value: "Incoming"}
                                     ],
                                     on: {
-                                        // onChange:newv => this.app.callEvent("tactions:filter",[newv])
+                                        onChange:newv => this.$$("$layout4").callEvent("tactions:filter", [newv])
                                     }
                                 },
                                 {width: 6}
@@ -167,6 +167,7 @@ const mainLayout = {
                                     else
                                         this.hideOverlay();
                                 }
+
                             },
                             columns: [
                                 {
