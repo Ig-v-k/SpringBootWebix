@@ -150,11 +150,12 @@ const mainLayout = {
                             select: true,
                             tooltip: true,
                             footer: true,
-                            save: {
-                                url: "rest->api/payment",
-                                autoupdate: true
-                            },
-                            url: "rest->api/payment",
+                            data: _listData,
+                            // save: {
+                            //     url: "rest->api/payment",
+                            //     autoupdate: true
+                            // },
+                            // url: "rest->api/payment",
                             scheme: {
                                 $init: function (obj) {
 
@@ -271,6 +272,12 @@ const mainLayout = {
         }
     ]
 };
+// $$("datview").sync(data, function () {
+//     this.filter(function (data) {
+//         return data.id <= 50;
+//     })
+// })
+
 
 const registrationLayout = {
     id: "registration",
