@@ -1,18 +1,18 @@
 var connection = {
     showSEM: true,
 
-    sendAjax:function(method,url,object){
+    sendAjax: function (method, url, object) {
         switch (method) {
             case "GET":
                 return webix.ajax().get(url);
             case "POST":
                 return webix.ajax().headers({
                     "Content-type": "application/json"
-                }).post(url,JSON.stringify(object));
+                }).post(url, JSON.stringify(object));
             case "PUT":
                 return webix.ajax().headers({
                     "Content-type": "application/json"
-                }).put(url,JSON.stringify(object));
+                }).put(url, JSON.stringify(object));
             case "DELETE":
                 return webix.ajax().del(url);
         }
@@ -105,7 +105,7 @@ var connection = {
                     }
 
                     retVal.isNew = true;
-                    if(dtId === "roomDT")
+                    if (dtId === "roomDT")
                         retVal.buildingName = obj.buildingName;// to update the table
                     try {
                         $$(dtId).add(retVal);
@@ -140,7 +140,7 @@ var connection = {
             }
             var data = $$(dtId).getItem(id);
             data[column] = newValue;
-            if(data.deleted==null) data.deleted=0;
+            if (data.deleted == null) data.deleted = 0;
 
             var commitEdit = function () {
                 util.preloader.inc();
@@ -165,8 +165,8 @@ var connection = {
                         util.preloader.dec();
                     }, success: function (text, data) {
                         //if (!data.json()) {
-                        if(text !== "Success")
-                        {  util.messages.showErrorMessage("Error modifying data!");
+                        if (text !== "Success") {
+                            util.messages.showErrorMessage("Error modifying data!");
                             data[column] = oldValue;
                             try {
                                 $$(dtId).updateItem(id, data);
@@ -213,49 +213,42 @@ var connection = {
                                 data[column] = state.old;
                                 util.messages.showErrorMessage("The field is required.")
                             }
-                        }
-                        else if (editValidationRules[i].rule === "isValidMac") {
+                        } else if (editValidationRules[i].rule === "isValidMac") {
                             if (!util.validation.checkMacAddress(state.value)) {
                                 state.value = state.old;
                                 data[column] = state.old;
                                 util.messages.showErrorMessage("Please enter a valid MAC address for the device.")
                             }
-                        }
-                        else if (editValidationRules[i].rule === "isValidNumber") {
+                        } else if (editValidationRules[i].rule === "isValidNumber") {
                             if (!util.validation.checkPhoneNumber(state.value)) {
                                 state.value = state.old;
                                 data[column] = state.old;
                                 util.messages.showErrorMessage("Please enter a valid phone number.")
                             }
-                        }
-                        else if(editValidationRules[i].rule === "checkLength") {
+                        } else if (editValidationRules[i].rule === "checkLength") {
                             var length;
-                            if(editor.column === "name")
+                            if (editor.column === "name")
                                 length = 100;
-                            else if(editor.column === "description")
+                            else if (editor.column === "description")
                                 length = 500;
-                            if(!util.validation.checkLength(state.value, length)) {
+                            if (!util.validation.checkLength(state.value, length)) {
                                 state.value = state.old;
                                 data[column] = state.old;
                                 util.messages.showErrorMessage("The maximum number of characters is " + length + "!");
                             }
-                        }
-                        else if(editValidationRules[i].rule === "isInteger") {
-                            if(!util.validation.isInteger(state.value)) {
+                        } else if (editValidationRules[i].rule === "isInteger") {
+                            if (!util.validation.isInteger(state.value)) {
                                 state.value = state.old;
                                 data[column] = state.old;
                                 util.messages.showErrorMessage("The number of floors must be an integer!")
                             }
-                        }
-                        else if(editValidationRules[i].rule === "isPositiveInteger") {
-                            if(!util.validation.isInteger(state.value) || state.value < 1) {
+                        } else if (editValidationRules[i].rule === "isPositiveInteger") {
+                            if (!util.validation.isInteger(state.value) || state.value < 1) {
                                 state.value = state.old;
                                 data[column] = state.old;
                                 util.messages.showErrorMessage("The capacity of the hall must be a positive integer!");
                             }
-                        }
-
-                        else if (util.validation.validateUponEdit(editor, editValidationRules[i].rule)) break;
+                        } else if (util.validation.validateUponEdit(editor, editValidationRules[i].rule)) break;
                         else {
                             setTimeout(function () {
                                 data[column] = oldValue;
@@ -284,7 +277,7 @@ var connection = {
         });
     },
 
-    dettachAjaxEvents: function(dtId){
+    dettachAjaxEvents: function (dtId) {
         $$(dtId).detachEvent("onBeforeEdit");
         $$(dtId).detachEvent("onBeforeAdd");
         $$(dtId).detachEvent("onBeforeDelete");

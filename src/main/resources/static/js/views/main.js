@@ -137,7 +137,12 @@ const mainLayout = {
                                         {id: "1", value: "Incoming"}
                                     ],
                                     on: {
-                                        onChange:newv => this.$$("$layout4").callEvent("tactions:filter", [newv])
+                                        onChange: function(id) {
+                                            if(id === "all")
+                                                $$("datview").filter();
+                                            else
+                                                $$("datview").filter(object => object.type != id)
+                                        }
                                     }
                                 },
                                 {width: 6}
@@ -151,16 +156,6 @@ const mainLayout = {
                             tooltip: true,
                             footer: true,
                             data: _listData,
-                            // save: {
-                            //     url: "rest->api/payment",
-                            //     autoupdate: true
-                            // },
-                            // url: "rest->api/payment",
-                            scheme: {
-                                $init: function (obj) {
-
-                                }
-                            },
                             on: {
                                 onAfterLoad: function () {
                                     if (!this.count())
@@ -272,12 +267,6 @@ const mainLayout = {
         }
     ]
 };
-// $$("datview").sync(data, function () {
-//     this.filter(function (data) {
-//         return data.id <= 50;
-//     })
-// })
-
 
 const registrationLayout = {
     id: "registration",

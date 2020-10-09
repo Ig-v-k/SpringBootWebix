@@ -13,7 +13,11 @@ var userStatus = {
 var formatDate = webix.Date.dateToStr("%j %F, %H:%i");
 var stringDate = formatDate(new Date());
 
-var _listData = JSON.parse(webix.ajax().sync().get("api/payment").responseText);
+var _listData = JSON.parse(
+    webix.ajax().sync().get("api/payment").responseText
+).filter(
+    object => object.id <= 10
+);
 
 var successMessage = "Success";
 
