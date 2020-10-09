@@ -1,7 +1,7 @@
 var menu_data = [
     {
         id: "dashboard", icon: "mdi mdi-view-dashboard", value: "Dashboards", data: [
-            {id: "dashboard1", value: "Dashboard 1"}
+            {id: "transactions", value: "Transactions"}
         ]
     },
     // {
@@ -104,6 +104,7 @@ const mainLayout = {
         },
         {
             id: "app_horizontal",
+            // minHeight: 860,
             autoheight: true,
             type: "wide",
             cols: [
@@ -112,12 +113,16 @@ const mainLayout = {
                     data: menu_data,
                     width: 190,
                     on: {
-                        onAfterSelect: function (id) {
-                            webix.message("Selected: " + this.getItem(id).value);
+                        // onAfterSelect: function (id) {
+                        //     webix.message("Selected: " + this.getItem(id).value);
+                        // }
+                        onAfterSelect: function () {
+                            mainUploadLayout()
                         }
                     }
                 },
                 {
+                    id: "containerMain",
                     paddingY: 10,
                     rows: [
                         {

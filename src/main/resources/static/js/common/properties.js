@@ -10,14 +10,16 @@ var userStatus = {
     inactive: 3
 };
 
-var formatDate = webix.Date.dateToStr("%j %F, %H:%i");
-var stringDate = formatDate(new Date());
+var _listData = JSON
+    .parse(webix
+        .ajax()
+        .sync()
+        .get("api/payment").responseText)
+    .filter(object => object.id <= 10);
 
-var _listData = JSON.parse(
-    webix.ajax().sync().get("api/payment").responseText
-).filter(
-    object => object.id <= 10
-);
+function mainUploadLayout() {
+    $$("datview").hide();
+}
 
 var successMessage = "Success";
 
