@@ -324,7 +324,6 @@ const mainLayout = {
                                     },
                                     on: {
                                         onAfterSelect: id => {
-                                            var arrayId = [];
                                             const user = _usersDataCollection.getItem(id);
                                             const datview = $$("datview");
                                             datview.eachRow(function (row) {
@@ -332,11 +331,6 @@ const mainLayout = {
                                                     datview.select(datview.getItem(row).id, true);
                                                 }
                                             })
-                                        },
-                                        onItemDblClick: id => {
-                                            if (this.getUrl()[0].page !== "customers")
-                                                this.show("customers?user=" + id + "/information");
-                                            else this.show("information");
                                         }
                                     }
                                 }
