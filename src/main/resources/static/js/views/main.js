@@ -58,11 +58,11 @@ const mainLayout = {
                     width: 37,
                     align: "left",
                     css: "app_button",
-                    collapsed:true,
+                    collapsed: true,
                     click: function () {
                         $$("$sidebar1").toggle();
                     },
-                    tooltip:"Click to collapse / expand the sidebar"
+                    tooltip: "Click to collapse / expand the sidebar"
                 },
                 {
                     view: "label",
@@ -113,11 +113,8 @@ const mainLayout = {
                     data: menu_data,
                     width: 190,
                     on: {
-                        // onAfterSelect: function (id) {
-                        //     webix.message("Selected: " + this.getItem(id).value);
-                        // }
-                        onAfterSelect: function () {
-                            mainUploadLayout()
+                        onAfterSelect: function (id) {
+                            webix.message("Selected: " + this.getItem(id).value);
                         }
                     }
                 },
@@ -142,8 +139,8 @@ const mainLayout = {
                                         {id: "1", value: "Incoming"}
                                     ],
                                     on: {
-                                        onChange: function(id) {
-                                            if(id === "all")
+                                        onChange: function (id) {
+                                            if (id === "all")
                                                 $$("datview").filter();
                                             else
                                                 $$("datview").filter(object => object.type != id)
@@ -157,10 +154,11 @@ const mainLayout = {
                             id: "datview",
                             view: "datatable",
                             localId: "grid",
-                            select: true,
+                            select: "row",
+                            multiselect: true,
                             tooltip: true,
                             footer: true,
-                            data: _listData,
+                            data: JSON.parse(_listDataPayments.responseText).filter(object => object.id <= 10),
                             on: {
                                 onAfterLoad: function () {
                                     if (!this.count())
@@ -261,7 +259,91 @@ const mainLayout = {
                     width: 250,
                     rows: [
                         {
-                            template: "row 1"
+                            rows: [
+                                {
+                                    view: "toolbar", css: webix.storage.local.get("bank_app_theme"),
+                                    elements: [
+                                        {width: 4},
+                                        {view: "label", label: "Persons", localId: "label", id: "labell"},
+                                        {width: 4},
+                                        {
+                                            view: "text", localId: "search", id: "searchh", hidden: true,
+                                            on: {
+                                                "onTimedKeyPress": function () {
+                                                    var value = this.getValue().toLowerCase();
+                                                    $$("listt").filter(function (obj) {
+                                                        const name = obj.firstName + " " + obj.lastName;
+                                                        return name.toLowerCase().indexOf(value) !== -1;
+                                                    })
+                                                }
+                                            }
+                                        },
+                                        {
+                                            view: "icon", icon: "mdi mdi-magnify",
+                                            state: "closed", localId: "search_icon",
+                                            tooltip: "Search for a client",
+                                            click: function () {
+                                                if (this.config.state === "closed") {
+                                                    $$("searchh").show();
+                                                    $$("labell").hide();
+                                                    $$("searchh").focus();
+                                                    this.config.state = "open";
+                                                } else if (this.config.state === "open") {
+                                                    $$("labell").show();
+                                                    $$("searchh").hide();
+                                                    this.config.state = "closed";
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    view: "list",
+                                    localId: "list",
+                                    id: "listt",
+                                    css: "persons_list",
+                                    width: (screen === "small") ? 230 : 250,
+                                    select: true,
+                                    data: JSON.parse(_listDataUsers.responseText),
+                                    tooltip: {
+                                        template: obj => {
+                                            let result = "<div>" + obj.lastName + ", " + obj.firstName + "</div>";
+                                            result += `<div>${"Born"} 1975-01-06</div>`;
+                                            result += `<p align="center" style="margin:0px;"><img src="../../img/tommie_1.jpg" width="200px" height="200px"></p>`;
+                                            result += `<div>${"Click twice to see more goodies"}</div>`;
+                                            return result;
+                                        }
+                                    },
+                                    type: {
+                                        template: obj => `<image class="userphoto" src="../../img/tommie_1.jpg" />
+                                                            <div class="text">
+                                                                <span class="username">${obj.firstName} ${obj.lastName}</span>
+                                                                <span class="money">$667.16</span>
+                                                            </div>`,
+                                        height: 66
+                                    },
+                                    on: {
+                                        onAfterSelect: id => {
+                                            var arrayId = [];
+                                            const user = _usersDataCollection.getItem(id);
+                                            const datview = $$("datview");
+                                            datview.eachRow(function (row) {
+                                                if(datview.getItem(row).paymentUser.firstName.toLowerCase() === user.firstName.toLowerCase()) {
+                                                    // arrayId.push(datview.getItem(row).id)
+                                                    datview.select(datview.getItem(row).id, true);
+                                                }
+                                            })
+                                            // webix.message(Array.from(arrayId));
+                                            // datview.addSelectArea(1, 2, false);
+                                        },
+                                        onItemDblClick: id => {
+                                            if (this.getUrl()[0].page !== "customers")
+                                                this.show("customers?user=" + id + "/information");
+                                            else this.show("information");
+                                        }
+                                    }
+                                }
+                            ]
                         },
                         {
                             template: "row 2"

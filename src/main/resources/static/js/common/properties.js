@@ -10,16 +10,13 @@ var userStatus = {
     inactive: 3
 };
 
-var _listData = JSON
-    .parse(webix
-        .ajax()
-        .sync()
-        .get("api/payment").responseText)
-    .filter(object => object.id <= 10);
+const _dateFormatUsers = webix.Date.dateToStr("%d %M %Y");
+var _listDataPayments = webix.ajax().sync().get("api/payment");
+var _listDataUsers = webix.ajax().sync().get("api/user");
+const _usersDataCollection = new webix.DataCollection({
+    data: _listDataUsers.responseText
+})
 
-function mainUploadLayout() {
-    $$("datview").hide();
-}
 
 var successMessage = "Success";
 

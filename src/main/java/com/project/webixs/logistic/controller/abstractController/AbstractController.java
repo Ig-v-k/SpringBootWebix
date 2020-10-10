@@ -4,6 +4,7 @@ import com.project.webixs.logistic.common.exception.BadRequestException;
 import com.project.webixs.logistic.common.exception.ForbiddenException;
 import com.project.webixs.logistic.controller.abstractLogger.AbstractLogger;
 import com.project.webixs.logistic.session.UserBean;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,6 +17,7 @@ import javax.persistence.PersistenceContext;
 import java.io.Serializable;
 import java.util.List;
 
+@Log
 public class AbstractController<T, ID extends Serializable> extends AbstractLogger<T> {
 
   private final JpaRepository<T, ID> repo;

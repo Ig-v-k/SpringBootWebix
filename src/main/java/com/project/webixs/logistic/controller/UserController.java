@@ -6,15 +6,20 @@ import com.project.webixs.logistic.model.LoginInfo;
 import com.project.webixs.logistic.model.User;
 import com.project.webixs.logistic.repository.UserRepository;
 import lombok.extern.apachecommons.CommonsLog;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+@Log
 @CommonsLog
 @RestController
 @RequestMapping("api/user")
@@ -33,6 +38,9 @@ public class UserController extends AbstractController<User, Integer> {
 
   @Override
   public List<User> getAll() throws ForbiddenException {
+    int roleId = userBean.getUser().getRoleId();
+	if ((roleId == 1) || (roleId == 2))
+	  return repository.findAll();
 	throw new ForbiddenException("Forbidden");
   }
 
@@ -51,10 +59,7 @@ public class UserController extends AbstractController<User, Integer> {
 	return "Success";
   }
 
-  @RequestMapping(
-		value = "/login",
-		method = RequestMethod.POST,
-		produces = MediaType.APPLICATION_JSON_VALUE)
+  @RequestMapping(value = "/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
   public User login(@RequestBody LoginInfo userInformation) throws ForbiddenException {
 	User user = repository.login(userInformation.getUsername(), userInformation.getPassword());
 	if (null != user) {
