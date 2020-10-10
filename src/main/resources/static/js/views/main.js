@@ -329,12 +329,9 @@ const mainLayout = {
                                             const datview = $$("datview");
                                             datview.eachRow(function (row) {
                                                 if(datview.getItem(row).paymentUser.firstName.toLowerCase() === user.firstName.toLowerCase()) {
-                                                    // arrayId.push(datview.getItem(row).id)
                                                     datview.select(datview.getItem(row).id, true);
                                                 }
                                             })
-                                            // webix.message(Array.from(arrayId));
-                                            // datview.addSelectArea(1, 2, false);
                                         },
                                         onItemDblClick: id => {
                                             if (this.getUrl()[0].page !== "customers")
